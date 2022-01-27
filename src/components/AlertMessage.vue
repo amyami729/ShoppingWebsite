@@ -1,0 +1,40 @@
+<template>
+  <div class="message-alert">
+    <div class="alert alert-dismissible" :class="'alert-' + item.status" v-for="(item, i) in messages" :key="i">
+      {{ item.message }}
+      <button type="button" class="btn-close" @click="removeMessage(i)" aria-label="Close">
+      </button>
+    </div>
+  </div>
+</template>
+
+<script>
+// 通過辅助函數將 store 中的 getter 映射到局部计算屬性
+import { mapGetters } from 'vuex';
+
+export default {
+  methods: {
+    removeMessage(num) {
+      this.$store.commit('alertModules/messageSplice', num);
+    }
+  },
+  computed: {
+    // 使用对象展开运算符将 getter 混入 computed 对象中
+    ...mapGetters('alertModules', ['messages']),
+  }
+};
+</script>
+
+<style scope lang="scss">
+.message-alert {
+  position: fixed;
+  max-width: 50%;
+  top: 20px;
+  left: 630px;
+  z-index: 1100;
+
+  .alert-dismissible{
+    font-size: 18px;
+  }
+}
+</style>
