@@ -1,4 +1,4 @@
-# 1014project
+# project
 
 ## Project setup
 ```
