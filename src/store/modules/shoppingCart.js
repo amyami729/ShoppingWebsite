@@ -1,59 +1,38 @@
+import axios from 'axios';
+
 export default ({
   namespaced: true,
-  state: {
-    isShow: false,
-    carts: []
+  state: {  // 定義狀態
+    cartProducts: []
+  },
+  mutations: {  // 定義方法
+    CART(state, payload) {
+      state.cartProducts = payload;
+    }
   },
   actions: {
-    addCart(context, { qty, cartProduct }) {
-      const product = cartProduct;
-      const carts = JSON.parse(localStorage.getItem('carts')) || [];
-      for (let i = 0; i < carts.length; i += 1) {
-        if (carts[i].id === product.id) {
-          carts[i].qty += qty;
-          localStorage.setItem('carts', JSON.stringify(carts));
-          context.commit('GETCARTS');
-          return;
-        }
-      }
-      product.qty = qty;
-      carts.push(product);
-      localStorage.setItem('carts', JSON.stringify(carts));
-      context.commit('GETCARTS');
+    getCartContents(context) {
+      const api = `${process.env.VUE_APP_CARTAPI}/api/cart`;  // 取得購物車列表
+      axios.get(api).then((response) => {
+        context.commit('CART', response.data.products);
+      });
     },
-    removeCart(context, id) {
-      const carts = JSON.parse(localStorage.getItem('carts'));
-      const newCarts = carts.filter((el) => el.id !== id);
-      localStorage.setItem('carts', JSON.stringify(newCarts));
-      context.dispatch('alertModules/updateMessage', {
-        message: '已刪除',
-      }, { root: true });
-      context.commit('GETCARTS');
+    // 更新商品數量同時更新DB
+    updateItemQty(context, { id, qty }) {
+      const api = `${process.env.VUE_APP_CARTAPI}/api/cart`;  // 加入購物車
+      const ItemInfoAddToCart = { productId: id, quantity: qty };
+      axios.post(api, ItemInfoAddToCart).then(() => {
+        context.dispatch('getCartContents');
+      });
     },
-    changeCart(context, { qty, id }) {
-      const carts = JSON.parse(localStorage.getItem('carts'));
-      for (let i = 0; i < carts.length; i += 1) {
-        if (carts[i].id === id) {
-          carts[i].qty = qty;
-          localStorage.setItem('carts', JSON.stringify(carts));
-          context.commit('GETCARTS');
-        }
-      }
+    addItemToCart(context, { id, qty }) {
+      const api = `${process.env.VUE_APP_CARTAPI}/api/add/qty`;  // 加入購物車（累加）
+      const productInfoAddedToCart = { productId: id, quantity: qty };
+      axios.post(api, productInfoAddedToCart).then(() => {
+        context.dispatch('alertModules/updateMessage',
+          { message: '商品已加入購物車', status: 'success' }, { root: true });
+        context.dispatch('getCartContents');
+      });
     }
-  },
-  mutations: {
-    GETCARTS(state) {
-      state.carts = JSON.parse(localStorage.getItem('carts')) || [];
-    },
-    HIDECART(state) {
-      state.isShow = false;
-    },
-    TOGGLECART(state) {
-      state.isShow = !state.isShow;
-    }
-  },
-  getters: {
-    isShow: (state) => state.isShow,
-    carts: (state) => state.carts,
   }
 });

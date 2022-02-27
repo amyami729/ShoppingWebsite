@@ -78,15 +78,9 @@ export default {
       });
     },
     addToCart(id, qty) {
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;  // 加入購物車
-      const productInfoAddedToCart = { product_id: id, qty };
-      this.$http.post(api, { data: productInfoAddedToCart }).then((response) => {
-        console.log(response.data.data);
-        this.$store.dispatch('alertModules/updateMessage',
-          { message: response.data.message, status: 'success' });
-      });
+      this.$store.dispatch('shoppingCart/addItemToCart', { id, qty });
     },
-    // 同步更新子組件的數量
+    // 同步更新子組件的數量並且加入購物車
     updateProductNum(inputValue) {
       this.currentProductNum = inputValue;
     }

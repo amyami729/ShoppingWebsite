@@ -3,8 +3,8 @@
     <div class="number-decrement" @click="decrementNumber">
       <span class="decrease">-</span>
     </div>
-    <input class="input-number" type="text" v-model="inputValue" @change="$emit('qtyValue', inputValue)" oninput="value=value.replace(/[^\d]/g,'')"/>
-    <div class="number-increment" @click="UpdateAddToCartValue">
+    <input class="input-number" type="text" v-model="currentQty" @change="inputNumber" oninput="value=value.replace(/[^\d]/g,'')"/>
+    <div class="number-increment" @click="incrementNumber">
       <span class="add">+</span>
     </div>
   </div>
@@ -13,36 +13,44 @@
 <script>
 export default {
   props: {
-    updateInputeQty: Number
+    inputQty: Number,
+    productId : String
   },
   data() {
     return {
-      inputValue: 1
+      currentQty: 1
     }
   },
   methods: {
+    inputNumber() {
+      this.$emit('qtyValue', this.currentQty);
+      this.UpdateAddToCartValue();
+    },
     decrementNumber() {
-      if (this.inputValue <= 1) {
-        this.inputValue = 1;
+      if (this.currentQty <= 1) {
+        this.currentQty = 1;
       }else {
-        this.inputValue--;
+        this.currentQty--;
       }
-      this.$emit('qtyValue', this.inputValue);
+      this.$emit('qtyValue', this.currentQty);
+      this.UpdateAddToCartValue();
     },
     incrementNumber() {
-      this.inputValue++;
-      this.$emit('qtyValue', this.inputValue);
+      this.currentQty++;
+      this.$emit('qtyValue', this.currentQty);
+      this.UpdateAddToCartValue();
     },
-    updateQty() {
-      this.inputValue += this.updateInputeQty -1 || 0
+    // 累加操作:1.已加入購物車後的input值再做數量+-時的數量處理 2.在Pagination頁面的選擇數量加入購物車的數量處理
+    addQty() {
+      this.currentQty += this.inputQty -1 || 0;
     },
+    // 將商品id跟數量傳回ShoppingCart組件
     UpdateAddToCartValue() {
-      this.incrementNumber();
-      this.$emit('emitUpdateItemQty', this.inputValue);
+      this.$emit('emitUpdateItemQty', [this.productId, this.currentQty]);
     }
   },
   created() {
-    this.updateQty();
+    this.addQty();
   }
 }
 </script>

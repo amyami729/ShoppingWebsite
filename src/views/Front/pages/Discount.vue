@@ -1,11 +1,14 @@
 <template>
-  <div id="discount">
-    11111111111111111
-  </div>
+  <div id="discount"></div>
 </template>
 
 <script>
 export default {
   
 }
+  
 </script>
+
+<style>
+
+</style>

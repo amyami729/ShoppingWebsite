@@ -130,8 +130,8 @@ export default {
     },
     getCategory() {
       const vm = this;
-      const getCategoryApiPath = `${process.env.VUE_APP_BACKENDAPI}/api/product/category`;
-      this.$http.get(getCategoryApiPath).then((response) => {
+      const api = `${process.env.VUE_APP_CATEGORYAPI}/api/product/category`;  // 取得產品分類
+      this.$http.get(api).then((response) => {
         vm.allCategory = response.data;
       });
     },

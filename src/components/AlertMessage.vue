@@ -9,7 +9,6 @@
 </template>
 
 <script>
-// 通過辅助函數將 store 中的 getter 映射到局部计算屬性
 import { mapGetters } from 'vuex';
 
 export default {
@@ -19,7 +18,7 @@ export default {
     }
   },
   computed: {
-    // 使用对象展开运算符将 getter 混入 computed 对象中
+    // 将 store 中的 getter 映射到局部计算属性
     ...mapGetters('alertModules', ['messages']),
   }
 };

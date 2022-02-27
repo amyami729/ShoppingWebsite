@@ -34,14 +34,9 @@ export default {
   props: ['product'],
   methods: {
     addToCart(id, qty = 1) {   // ES6.當函式傳進來時,若沒有帶入qty,則會直接使用預設值1
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;  // 加入購物車
-      const productInfoAddedToCart = { product_id: id, qty }
-      this.$http.post(api, {data: productInfoAddedToCart}).then((response) => {
-        this.$store.dispatch('alertModules/updateMessage',
-          { message: response.data.message, status: 'success' });
-      })
+      this.$store.dispatch('shoppingCart/addItemToCart', { id, qty });
     }
-  },
+  }
 }
 </script>
 

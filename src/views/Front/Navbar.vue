@@ -41,55 +41,77 @@
           <li>
             <a href="#">
               <i class="fas fa-heart"></i>
-            </a> 
+            </a>
           </li>
           <li>
-            <router-link to="/cart" @mouseover="openModal(true)" @mouseleave="openModal(false)">
+            <span class="cartModal" @click="showCartModal(true)">
               <i class="fas fa-shopping-cart"></i>
-              <span class="num">6</span>
-            </router-link>
+              <span class="num" v-show="cartProducts.length > 0">{{ cartProducts.length }}</span>
+            </span>
           </li>
         </ul>
 
-        <div class="cart-modal" @mouseover="openModal(true)" @mouseleave="openModal(false)">
+        <div class="cart-modal" v-if="cartModalShow">
           <i class="fas fa-caret-up"></i>
-          <p class="cart-top">最近加入的商品</p>
+          <p class="cart-top"  v-if="cartProducts.length !== 0">最近加入的商品</p>
           <div class="cart-content-box">
-            <div class="cart-content">
-              <img src="https://img.ruten.com.tw/s5/015/7a7/dbawui/e/31/60/22046938308960_312.jpg" alt="">
-              <div class="lists-info">
-                <p class="product-title">性感長洋裝性感長洋裝性感長洋裝洋裝</p>
-                <p class="selling-price">$1,235</p>
-              </div>
+            <div class="cart-content" v-for="item in cartProducts.slice(0, 5)" :key="item">
+              <router-link :to="`/product-info/${item.id}`">
+                <img :src="item.imageUrl" alt="">
+                <div class="lists-info">
+                  <p class="product-title">{{ item.title }}</p>
+                  <p class="selling-price">{{ $filters.currency(item.price) }}</p>
+                </div>
+              </router-link>
             </div>
           </div>
           <div class="cart-footer">
-            <p class="footer-left">看購物車裡的其他<b>62</b>件產品</p>
+            <p class="footer-left" v-if="cartProducts.length > 5">看購物車裡的其他<b>{{ cartProducts.length - 5 }}</b>件產品</p>
             <router-link to="/cart">
-              <div class="footer-right-box">
+              <div class="footer-right-box" v-if="cartProducts.length !== 0">
                 <p class="footer-right">查看我的購物車</p>
               </div>
             </router-link>
           </div>
+
+          <div class="cart-otherContent" v-if="cartProducts.length === 0">
+            <img src="@/assets/img/empty_cart.png" alt="" class="emptyCart-logo">
+            <p>你的購物車是空的ㄛ</p>
+          </div>
         </div>
+
+        <div class="cart-mask" v-if="cartModalShow" @click="showCartModal(false)"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 
 export default {
+  data() {
+    return {
+      cartModalShow: false
+    }
+  },
   methods: {
-    openModal(isShow) {
-      const cartContent = document.querySelector('.cart-modal');
-      if (isShow) { 
-        cartContent.style.display = 'block';
-      }else { 
-        cartContent.style.display = 'none';
+    showCartModal(isShow) {
+      if (isShow) {
+        this.cartModalShow = true;
+      }else {
+        this.cartModalShow = false;
       }
     }
-  }
+  },
+  computed: {
+    ...mapState('shoppingCart', {
+      cartProducts: state => state.cartProducts.reverse()
+    })
+  },
+  created() {
+    this.$store.dispatch('shoppingCart/getCartContents');
+  },
 }
 </script>
 
@@ -180,26 +202,29 @@ export default {
           }
         }
 
-        .num{
-          display: inline-block;
-          width: 19px;
-          height: 19px;
-          position: absolute;
-          line-height: 15px;
-          border-radius: 50%;
-          font-size: 9px;
-          color: white;
-          background: red;
-          right: 7px;
-          bottom: 13px;
-          text-align: center;
-          padding-top: 2px;
+        .cartModal{
+          cursor: pointer;
+
+          .num{
+            display: inline-block;
+            width: 19px;
+            height: 19px;
+            position: absolute;
+            line-height: 15px;
+            border-radius: 50%;
+            font-size: 9px;
+            color: white;
+            background: red;
+            right: 7px;
+            bottom: 13px;
+            text-align: center;
+            padding-top: 2px;
+          }
         }
       }
 
       .cart-modal{
         width: 350px;
-        height: 400px;
         border: 1px solid #e7e7e5;
         background: #fff;
         position: absolute;
@@ -207,7 +232,6 @@ export default {
         top: 75px;
         right: 0;
         box-shadow: 3px 3px 9px #c4c4c4;
-        display: none;
 
         i{
           width: 80px;
@@ -219,6 +243,22 @@ export default {
           padding-left: 45px;
         }
 
+        .cart-otherContent{
+          line-height: 0;
+          text-align: center;
+          margin-bottom: 100px;
+
+          .emptyCart-logo{
+            padding-bottom: 25px;
+            padding-top: 25px;
+          }
+
+          p{
+            font-size: 16px;
+            color: #616161;
+          }
+        }
+
         .cart-top{
           height: 40px;
           line-height: 0;
@@ -228,8 +268,6 @@ export default {
         }
 
         .cart-content-box{
-          width: 348px;
-          height: 298px;
           margin-top: -16px;
 
           .cart-content{
@@ -307,6 +345,16 @@ export default {
             }
           }
         }
+      }
+
+      .cart-mask{
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 49;
+        background: rgba(7, 17, 27, 0.3);
       }
     }
   }

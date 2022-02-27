@@ -4,74 +4,87 @@
       <p class="cartTitle">購物車清單</p>
     </div>
 
-    <div class="shopCartNav">
-      <div class="listTitleLeft">
-        <div class="checkboxTitle">
-          <input class="check" type="checkbox" name="method" value="plus"/>
+    <div class="shopCartContent" v-if="cartProducts.length !== 0">
+      <div class="shopCartNav">
+        <div class="listTitleLeft">
+          <!-- 勾選 -->
+          <div class="checkboxTitle">
+            <input class="check" type="checkbox" @click="clickCheckAll" v-model="checkAll" />
+          </div>
+          <div class="productMessageTitle">
+            <p class="goods">商品</p>
+            <p class="unitPrice">單價</p>
+          </div>
         </div>
-        <div class="productMessageTitle">
-          <p class="goods">商品</p>
-          <p class="unitPrice">單價</p>
+        <div class="listTitleRight">
+          <div class="otherTitleLeft">
+            <p class="quantity">數量</p>
+          </div>
+          <div class="otherTitleRight">
+            <p class="totalPriceTitle">總價</p>
+            <p class="operate">操作</p>
+          </div>
         </div>
       </div>
-      <div class="listTitleRight">
-        <div class="otherTitleLeft">
-          <p class="quantity">數量</p>
+
+      <div class="cartList" v-for="(item, index) in cartProducts" :key="index">
+        <div class="cartListInfo">
+          <!-- 勾選 -->
+          <div class="checkbox">
+            <input class="check" type="checkbox" @click="clickCheckbox(item)" v-model="item.checked" />
+          </div>
+          <div class="productMessage">
+            <img :src="item.imageUrl" alt="">
+            <p class="productTitle">{{ item.title }}</p>
+          </div>
         </div>
-        <div class="otherTitleRight">
-          <p class="totalPriceTitle">總價</p>
-          <p class="operate">操作</p>
+        <div class="cartListOther">
+          <div class="otherLeft">
+            <span class="originalPrice">{{ $filters.currency(item.price) }}</span>
+            <!-- 購物車數量鈕 -->
+            <cartControl class="cartControl" :inputQty="item.quantity" :productId="item.id" @emitUpdateItemQty="updateItemQty"></cartControl>
+          </div>
+          <div class="otherRight">
+            <span class="totalPrice">{{ $filters.currency(item.total) }}</span>
+            <div class="deleteBtn" @click="removeCartItem(item.id)">
+              <i class="fas fa-trash"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cartCheckoutInfo">
+        <div class="CouponUsage">
+          <input  class="couponUsageInput" type="text" placeholder="請輸入優惠券序號">
+          <div class="UsageBtn">
+            <span>套用</span>
+          </div>
+        </div>
+        <div class="checkoutInfo">
+          <!-- 勾選 -->
+          <div class="checkoutLeft">
+            <input class="check" type="checkbox" @click="clickCheckAll" v-model="checkAll" />
+            <span class="selectAll">全選({{ cartProducts.length }})</span>
+          </div>
+          <div class="checkoutRight">
+            <div class="productstotalPrice">
+              <span class="numberOfItems">總金額 (0 個商品): </span>
+              <span class="checkoutTotalPrice">$0</span>
+              <p class="howMuchDiscount">已省下 <span>$38</span></p>
+            </div>
+            <div class="checkoutBtn">
+              <span>去買單</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="cartList" v-for="item in cartProducts.carts" :key="item">
-      <div class="cartListInfo">  
-        <div class="checkbox">
-          <input class="check" type="checkbox" name="method" value="plus" />
-        </div>
-        <div class="productMessage">
-          <img :src="item.product.imageUrl" alt="">
-          <p class="productTitle">{{ item.product.title }}</p>
-        </div>
-      </div>
-      <div class="cartListOther">
-        <div class="otherLeft">
-          <span class="originalPrice">{{ $filters.currency(item.product.price) }}</span>
-          <!-- 購物車數量鈕 -->
-          <cartControl class="cartControl" :updateInputeQty="item.qty" @emitUpdateItemQty="updateItemQty"></cartControl>
-        </div>
-        <div class="otherRight">
-          <span class="totalPrice">$total</span>
-          <div class="deleteBtn" @click="removeCartItem(item.id)">
-            <i class="fas fa-trash"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="cartCheckoutInfo">
-      <div class="CouponUsage">
-        <input  class="couponUsageInput" type="text" placeholder="請輸入優惠券序號">
-        <div class="UsageBtn">
-          <span>套用</span>
-        </div>
-      </div>
-      <div class="checkoutInfo">
-        <div class="checkoutLeft">
-          <input class="check" type="checkbox" name="method" value="plus"/>
-          <span class="selectAll">全選(5)</span>
-        </div>
-        <div class="checkoutRight">
-          <div class="productstotalPrice">
-            <span class="numberOfItems">總金額 (0 個商品): </span>
-            <span class="checkoutTotalPrice">$0</span>
-            <p class="howMuchDiscount">已省下 <span>$38</span></p>
-          </div>
-          <div class="checkoutBtn">
-            <span>去買單</span>
-          </div>
-        </div>
+    <div class="shopCart-otherContent" v-else>
+      <img src="@/assets/img/empty_cart.png" alt="" class="emptyCart-logo">
+      <p>你的購物車是空的ㄛ</p>
+      <div class="jumpPage">
+        <router-link to="/products?categoryId=全部商品" class="goToPageBtn">去購物吧!</router-link>
       </div>
     </div>
   </div>
@@ -79,6 +92,7 @@
 
 <script>
 import cartControl from '@/components/Front/CartControl.vue';
+import { mapState } from 'vuex';
 
 export default {
   components: {
@@ -86,41 +100,76 @@ export default {
   },
   data() {
     return {
-      cartProducts: []
+      checkAll: false,  // 用來控制是否全選
+      checked: [],     // 用來儲存已勾選的商品資料
+      currentProduct: []  // 用來儲存複選框勾選的內容
     }
   },
   methods: {
-    getCartContents() {
-      const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;  // 取得購物車列表
-      this.$http.get(api).then((response) => {
-        vm.cartProducts = response.data.data;
-        // console.log(response.data.data.carts);
-      });
-    },
     removeCartItem(id) {
-      const vm = this;
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/${id}`;  // 刪除某一筆購物車資料
-      this.$http.delete(api).then((response) => {
-        if (response.data.success) {
-          vm.getCartContents();
-        }
+      const api = `${process.env.VUE_APP_CARTAPI}/api/cart/${id}`;  // 刪除某一筆購物車資料
+      this.$http.delete(api).then(() => {
+        this.$store.dispatch('shoppingCart/getCartContents');
       });
     },
-    // 同步更新子組件的數量
-    updateItemQty(inputValue) {
-      // const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`;  // 加入購物車
-      this.cartProducts.carts.forEach( item => {
-        item.qty += inputValue - item.qty;
-        console.log(item.qty);
-        // this.$http.post(api, qty ).then((response) => {
-        // console.log(response);
-      // });
-      });
+    // 同步更新子組件的數量並且重新加入購物車
+    updateItemQty(productInFo) {
+      const id = productInFo[0];
+      const qty = productInFo[1];
+      this.$store.dispatch('shoppingCart/updateItemQty', { id, qty });
+    },
+    // 全選/反選的處理
+    clickCheckAll() {
+      this.checkAll = !this.checkAll;  // 取反
+      if (this.checkAll) {  // 全選狀態
+        this.checked = this.cartProducts;
+        this.cartProducts.forEach((item) => {
+					item.checked = true;
+				});
+      }else {  // 反選狀態
+        this.checked = [];
+        this.cartProducts.forEach((item) => {
+					item.checked = false;
+				});
+      }
+    },
+    // 複選框勾選/未勾選的處理
+    clickCheckbox(item) {
+      item.checked = !item.checked;  // 取反
+      if (item.checked) {  // 複選框勾選或 反選狀態
+        this.currentProduct.push(item);
+      }else {  // 複選框取消勾選或 全選狀態取消勾選
+
+        // 1.確認該元素的索引值
+        this.indexOf(item);
+
+        // 2.根據索引值刪除陣列中該元素對應的值
+        const index = this.indexOf(item);
+        this.currentProduct.splice(index, 1);
+      }
+
+      // 複選框全部選中的處理
+      if (this.currentProduct.length === this.cartProducts.length) {
+        this.checkAll = true;
+      }else {
+        this.checkAll = false;
+      }
+    },
+    indexOf(val) {
+      for(let i = 0; i < this.cartProducts.length; i++){
+        if(this.cartProducts[i] === val){
+          return i;
+        }
+      }
     }
   },
+  computed: {
+    ...mapState('shoppingCart', {
+      cartProducts: state => state.cartProducts
+    })
+  },
   created() {
-    this.getCartContents();
+    this.$store.dispatch('shoppingCart/getCartContents');
   }
 }
 </script>
@@ -520,6 +569,40 @@ export default {
             font-size: 16px;
             margin-left: 75px;
           }
+        }
+      }
+    }
+  }
+
+  .shopCart-otherContent{
+    text-align: center;
+    margin-bottom: 100px;
+
+    .emptyCart-logo{
+      padding-bottom: 25px;
+      padding-top: 25px;
+    }
+
+    p{
+      font-size: 16px;
+      color: #909090;
+      font-weight: bold;
+    }
+
+    .jumpPage{
+      width: 120px;
+      height: 25px;
+      background: #ef4c2f;
+      margin-left: 502px;
+
+      .goToPageBtn{
+        vertical-align: middle;
+        text-decoration: none;
+        color: #ffffff;
+
+        &:hover{
+          color: #ffffff;
+          text-decoration: underline;
         }
       }
     }
