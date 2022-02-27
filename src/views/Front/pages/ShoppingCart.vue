@@ -136,9 +136,9 @@ export default {
     // 複選框勾選/未勾選的處理
     clickCheckbox(item) {
       item.checked = !item.checked;  // 取反
-      if (item.checked) {  // 複選框勾選或 反選狀態
+      if (item.checked) {  // 複選框勾選
         this.currentProduct.push(item);
-      }else {  // 複選框取消勾選或 全選狀態取消勾選
+      }else {  // 複選框取消勾選
 
         // 1.確認該元素的索引值
         this.indexOf(item);
