@@ -7,7 +7,6 @@
     <div class="shopCartContent" v-if="cartProducts.length !== 0">
       <div class="shopCartNav">
         <div class="listTitleLeft">
-          <!-- 勾選 -->
           <div class="checkboxTitle">
             <input class="check" type="checkbox" @click="clickCheckAll" v-model="checkAll" />
           </div>
@@ -29,7 +28,6 @@
 
       <div class="cartList" v-for="(item, index) in cartProducts" :key="index">
         <div class="cartListInfo">
-          <!-- 勾選 -->
           <div class="checkbox">
             <input class="check" type="checkbox" @click="clickCheckbox(item)" v-model="item.checked" />
           </div>
@@ -61,16 +59,15 @@
           </div>
         </div>
         <div class="checkoutInfo">
-          <!-- 勾選 -->
           <div class="checkoutLeft">
             <input class="check" type="checkbox" @click="clickCheckAll" v-model="checkAll" />
             <span class="selectAll">全選({{ cartProducts.length }})</span>
           </div>
           <div class="checkoutRight">
             <div class="productstotalPrice">
-              <span class="numberOfItems">總金額 (0 個商品): </span>
-              <span class="checkoutTotalPrice">$0</span>
-              <p class="howMuchDiscount">已省下 <span>$38</span></p>
+              <span class="numberOfItems">總金額 ({{ checkedNumber }} 個商品): </span>
+              <span class="checkoutTotalPrice">{{ $filters.currency(checkedTotal) }}</span>
+              <p class="howMuchDiscount">已省下 <span>$0</span></p>
             </div>
             <div class="checkoutBtn">
               <span>去買單</span>
@@ -101,12 +98,13 @@ export default {
   data() {
     return {
       checkAll: false,  // 用來控制是否全選
-      checked: [],     // 用來儲存已勾選的商品資料
-      currentProduct: []  // 用來儲存複選框勾選的內容
+      checkedNumber: 0,  // 1.根據值判斷是否全選, 2.計算已勾選的商品數
+      checkedTotal: 0    // 用來計算已勾選的商品total
     }
   },
   methods: {
     removeCartItem(id) {
+      this.checkAll = false;
       const api = `${process.env.VUE_APP_CARTAPI}/api/cart/${id}`;  // 刪除某一筆購物車資料
       this.$http.delete(api).then(() => {
         this.$store.dispatch('shoppingCart/getCartContents');
@@ -114,6 +112,7 @@ export default {
     },
     // 同步更新子組件的數量並且重新加入購物車
     updateItemQty(productInFo) {
+      this.checkAll = false;
       const id = productInFo[0];
       const qty = productInFo[1];
       this.$store.dispatch('shoppingCart/updateItemQty', { id, qty });
@@ -121,45 +120,33 @@ export default {
     // 全選/反選的處理
     clickCheckAll() {
       this.checkAll = !this.checkAll;  // 取反
-      if (this.checkAll) {  // 全選狀態
-        this.checked = this.cartProducts;
+      if (this.checkAll) {  // 全選
         this.cartProducts.forEach((item) => {
-					item.checked = true;
-				});
-      }else {  // 反選狀態
-        this.checked = [];
+          item.checked = true;
+          this.checkedTotal += item.total;
+        });
+        this.checkedNumber = this.cartProducts.length;
+      }else {  // 反選
         this.cartProducts.forEach((item) => {
-					item.checked = false;
-				});
+          item.checked = false;
+          this.checkedTotal = 0;
+        });
+        this.checkedNumber = 0;
       }
     },
     // 複選框勾選/未勾選的處理
     clickCheckbox(item) {
       item.checked = !item.checked;  // 取反
-      if (item.checked) {  // 複選框勾選
-        this.currentProduct.push(item);
-      }else {  // 複選框取消勾選
-
-        // 1.確認該元素的索引值
-        this.indexOf(item);
-
-        // 2.根據索引值刪除陣列中該元素對應的值
-        const index = this.indexOf(item);
-        this.currentProduct.splice(index, 1);
-      }
-
-      // 複選框全部選中的處理
-      if (this.currentProduct.length === this.cartProducts.length) {
-        this.checkAll = true;
-      }else {
-        this.checkAll = false;
-      }
-    },
-    indexOf(val) {
-      for(let i = 0; i < this.cartProducts.length; i++){
-        if(this.cartProducts[i] === val){
-          return i;
+      if (item.checked) {  // 勾選
+        this.checkedNumber++;
+        if (this.checkedNumber === this.cartProducts.length) {
+          this.checkAll = true;
         }
+        this.checkedTotal += item.total;
+      }else {  // 取消勾選
+        this.checkedNumber--;
+        this.checkAll = false;
+        this.checkedTotal -= item.total;
       }
     }
   },
