@@ -66,7 +66,7 @@
             </div>
           </div>
           <div class="cart-footer">
-            <p class="footer-left" v-if="cartProducts.length > 5">看購物車裡的其他<b>{{ cartProducts.length - 5 }}</b>件產品</p>
+            <p class="footer-left" v-if="cartProducts.length > 5"><b>{{ cartProducts.length - 5 }}</b> 看購物車裡的商品</p>
             <router-link to="/cart">
               <div class="footer-right-box" v-if="cartProducts.length !== 0">
                 <p class="footer-right">查看我的購物車</p>
