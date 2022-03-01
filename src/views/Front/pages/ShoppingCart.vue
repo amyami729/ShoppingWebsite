@@ -26,7 +26,7 @@
         </div>
       </div>
 
-      <div class="cartList" v-for="(item, index) in cartProducts" :key="index">
+      <div class="cartList" v-for="item in cartProducts" :key="item">
         <div class="cartListInfo">
           <div class="checkbox">
             <input class="check" type="checkbox" @click="clickCheckbox(item)" v-model="item.checked" />
