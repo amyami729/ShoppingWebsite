@@ -18,10 +18,10 @@
           <input class="form-control products-search" maxlength="18" autocomplete="off" type="search" :value="search"  @input="search = $event.target.value" @keyup.enter="getProductsBySearch" placeholder="搜尋" id="search">
         </div>
         
-        <select class="products-price">
-          <option selected="true">預設排序</option>
-          <option value="價格由高至低" @click="sortItemsByPrice(true)">價格由高至低</option>
-          <option value="價格由低至高" @click="sortItemsByPrice(false)">價格由低至高</option>
+        <select class="products-price" @change="sortItemsByPrice">
+          <option selected="true" value="0">預設排序</option>
+          <option value="1">價格由高至低</option>
+          <option value="2">價格由低至高</option>
         </select>
 
         <div class="search-popover" v-if="isShowSearchBar"  @click="getProductsBySearch">
@@ -177,18 +177,20 @@ export default {
       vm.updatePagination();
     },
     // 按價格順序排列商品
-    sortItemsByPrice(max) {
+    sortItemsByPrice() {
       const vm = this;
-      console.log(vm.allProducts);
+      const priceOptions = document.querySelector('.products-price');
       vm.sortedProducts = vm.allProducts;
       vm.displayProducts = vm.sortedProducts.sort((product1, product2) => {
-        if (max) {
+        if (priceOptions.value == 1) {
           return product2.price - product1.price;
-        }else {
+        }else if (priceOptions.value == 2) {
           return product1.price - product2.price;
+        }else {
+          vm.displayProducts = vm.allProducts;
+          console.log('123');
         }
       });
-      console.log(vm.displayProducts);
       vm.updatePagination();
     }
   },
@@ -214,8 +216,6 @@ export default {
   created() {
     this.initAllProducts();
     this.getCategory();
-
-    this.sortItemsByPrice()
   }
 }
 </script>
