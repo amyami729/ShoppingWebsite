@@ -33,7 +33,9 @@
           </div>
           <div class="productMessage">
             <img :src="item.imageUrl" alt="">
-            <p class="productTitle">{{ item.title }}</p>
+            <router-link :to="`/product-info/${item.id}`">
+              <p class="productTitle">{{ item.title }}</p>
+            </router-link>
           </div>
         </div>
         <div class="cartListOther">
@@ -121,6 +123,7 @@ export default {
     clickCheckAll() {
       this.checkAll = !this.checkAll;  // 取反
       if (this.checkAll) {  // 全選
+        this.checkedTotal = 0;
         this.cartProducts.forEach((item) => {
           item.checked = true;
           this.checkedTotal += item.total;

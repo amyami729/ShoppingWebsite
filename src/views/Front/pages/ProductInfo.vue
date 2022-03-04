@@ -41,9 +41,11 @@
             <i class="fas fa-cart-plus"></i>
             <span>加入購物車</span>
           </div>
-          <div class="buy">
-            <span>直接購買</span>
-          </div>
+          <router-link to="/cart">
+            <div class="buy" @click="addToCart(productId, currentProductNum)">
+              <span>直接購買</span>
+            </div>
+          </router-link>
         </div>
       </div>
     </div>
