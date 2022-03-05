@@ -20,6 +20,7 @@
         
         <select class="products-price" @change="sortItemsByPrice">
           <option selected="true" disabled>價格排序</option>
+          <option value="0">最新上架</option>
           <option value="1">價格: 高到低</option>
           <option value="2">價格: 低到高</option>
         </select>
@@ -180,13 +181,19 @@ export default {
       const vm = this;
       const priceOptions = document.querySelector('.products-price');
       const sortedProducts = vm.allProducts;
-      vm.displayProducts = sortedProducts.sort((product1, product2) => {
+      if (priceOptions.value === "0") {
+        vm.displayProducts = sortedProducts;
+        // console.log(vm.displayProducts);
+        console.log('123');
+      }else {
+        vm.displayProducts = sortedProducts.sort((product1, product2) => {
         if (priceOptions.value === "1") {  // 價格高到低排序
           return product2.price - product1.price;
-        }else {  // 價格低到高排序
+        }else if (priceOptions.value === "2") {  // 價格低到高排序
           return product1.price - product2.price;
         }
       });
+      }
       vm.updatePagination();
     }
   },
