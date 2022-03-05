@@ -19,9 +19,9 @@
         </div>
         
         <select class="products-price" @change="sortItemsByPrice">
-          <option selected="true" value="0">預設排序</option>
-          <option value="1">價格由高至低</option>
-          <option value="2">價格由低至高</option>
+          <option selected="true" disabled>價格排序</option>
+          <option value="1">價格: 高到低</option>
+          <option value="2">價格: 低到高</option>
         </select>
 
         <div class="search-popover" v-if="isShowSearchBar"  @click="getProductsBySearch">
@@ -71,8 +71,7 @@ export default {
       currentPage: '',   //用來存放目前是第幾頁
       isLoading: false,   // 預設為停止loading狀態
       search: '',
-      isShowSearchBar: false,
-      sortedProducts: []
+      isShowSearchBar: false
     }
   },
   methods: {
@@ -180,15 +179,12 @@ export default {
     sortItemsByPrice() {
       const vm = this;
       const priceOptions = document.querySelector('.products-price');
-      vm.sortedProducts = vm.allProducts;
-      vm.displayProducts = vm.sortedProducts.sort((product1, product2) => {
-        if (priceOptions.value == 1) {
+      const sortedProducts = vm.allProducts;
+      vm.displayProducts = sortedProducts.sort((product1, product2) => {
+        if (priceOptions.value === "1") {  // 價格高到低排序
           return product2.price - product1.price;
-        }else if (priceOptions.value == 2) {
+        }else {  // 價格低到高排序
           return product1.price - product2.price;
-        }else {
-          vm.displayProducts = vm.allProducts;
-          console.log('123');
         }
       });
       vm.updatePagination();
