@@ -40,7 +40,7 @@ export default {
       this.$emit('qtyValue', this.currentQty);
       this.UpdateAddToCartValue();
     },
-    // 累加操作:1.已加入購物車後的input值再做數量+-時的數量處理 2.在Pagination頁面的選擇數量加入購物車的數量處理
+    // 累加操作:1.已加入購物車後的input值再做數量+-時的數量處理 2.在ProductInfo頁面的選擇數量加入購物車的數量處理
     addQty() {
       this.currentQty += this.inputQty -1 || 0;
     },
