@@ -12,9 +12,7 @@
 
     <div class="banner">
       <img src="@/assets/img/banner.png" alt="">
-      <router-link to="/discount"  class="receive-discount">
-        立即領取
-      </router-link> 
+      <p class="receive-discount">立即領取</p> 
     </div>
 
     <div class="featured-list">
@@ -179,7 +177,7 @@ export default {
       background: #88644e;
       text-align: center;
       color: #ffffff;
-      padding-top: 10px;
+      padding-top: 12.6px;
       left: 960px;
       top: 28px;
       text-decoration: none;
