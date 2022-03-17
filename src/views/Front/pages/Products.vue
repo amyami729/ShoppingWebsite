@@ -18,9 +18,8 @@
           <input class="form-control products-search" maxlength="18" autocomplete="off" type="search" :value="search"  @input="search = $event.target.value" @keyup.enter="getProductsBySearch" placeholder="搜尋" id="search">
         </div>
         
-        <select class="products-price" @change="sortItemsByPrice">
-          <option selected="true" disabled>價格排序</option>
-          <option value="0">最新上架</option>
+        <select class="products-price" @change="updateSort">
+          <option selected="true" value="0">最新上架</option>
           <option value="1">價格: 高到低</option>
           <option value="2">價格: 低到高</option>
         </select>
@@ -37,7 +36,7 @@
     </div>
     <div class="septalLine"></div>
     <div class="product-category">
-      <button class="product-category-btn btn" @click="updateDisplayProductsByCategory(categoryItem)" :class="{ categoryActive : currentCategory === categoryItem }" v-for="(categoryItem, index) in allCategory" :key="index">{{ categoryItem }}</button>
+      <button class="product-category-btn btn" @click="updateCategoryId(categoryItem)" :class="{ categoryActive : currentCategory === categoryItem }" v-for="(categoryItem, index) in allCategory" :key="index">{{ categoryItem }}</button>
     </div>
     <div class="card-wrapper" v-for="item in getProductsByPage(currentPage, displayProducts)" :key="item.id">
       <card :product="item"></card>
@@ -63,6 +62,11 @@ export default {
   },
   data() {
     return {
+      displayQueryParameters: {
+        categoryId: '全部商品',
+        sortBy: 'time',
+        order: 'asc'
+      },
       allProducts: [],
       displayProducts: [],   // 用來存放最後展示的產品
       allCategory: [],
@@ -94,9 +98,10 @@ export default {
       });
     },
     getAllProducts() {
-      this.displayProducts = this.allProducts;
-      this.currentCategory = '全部商品';
-      this.updatePagination();
+      const vm = this;
+      vm.displayProducts = vm.allProducts;
+      vm.currentCategory = '全部商品';
+      vm.updatePagination();
     },
     // 按不同類別去處理分頁數
     updatePagination(page = 1) {
@@ -135,31 +140,6 @@ export default {
         vm.allCategory = response.data;
       });
     },
-    // 按類別更新顯示產品
-    updateDisplayProductsByCategory(categoryItem='全部商品') {
-      const vm = this;
-      vm.currentCategory = categoryItem;
-      // 將 categoryItem 傳進來作為 query 的參數值, 並跳轉頁面 
-      this.$router.push({
-        query:{
-          categoryId: categoryItem
-        }
-      });
-      if (categoryItem === '全部商品') {
-        vm.displayProducts = vm.allProducts;
-      } else {
-        vm.displayProducts = vm.allProducts.filter((product) => product.category === categoryItem);
-      }
-      vm.updatePagination();
-    },
-    // 獲取參數值
-    getParameterValueOfCategoryId(categoryItem) {
-      const vm = this;
-      vm.categoryId = this.$route.query.categoryId;
-      if (vm.categoryId !== categoryItem) {
-        vm.updateDisplayProductsByCategory(vm.categoryId);
-      }
-    },
     // 按搜尋獲取產品
     getProductsBySearch() {
       const vm = this;
@@ -176,24 +156,68 @@ export default {
       }
       vm.updatePagination();
     },
-    // 按價格順序排列商品
-    sortItemsByPrice() {
+    // update category
+    updateCategoryId(id) {
+      const vm = this;
+      vm.currentCategory = id;
+      vm.displayQueryParameters.categoryId = id;
+      vm.updateDisplayProducts();
+    },
+    // 獲取參數(刷新之後仍保留先前選中的 Category 狀態)
+    getParameterValueOfCategoryId() {
+      const vm = this;
+      vm.categoryId = this.$route.query.categoryId;
+      vm.updateCategoryId(vm.categoryId);
+    },
+    // update sort
+    updateSort() {
       const vm = this;
       const priceOptions = document.querySelector('.products-price');
-      const sortedProducts = vm.allProducts;
       if (priceOptions.value === "0") {
-        vm.displayProducts = sortedProducts;
-        // console.log(vm.displayProducts);
-        console.log('123');
-      }else {
-        vm.displayProducts = sortedProducts.sort((product1, product2) => {
-        if (priceOptions.value === "1") {  // 價格高到低排序
-          return product2.price - product1.price;
-        }else if (priceOptions.value === "2") {  // 價格低到高排序
-          return product1.price - product2.price;
+        vm.displayQueryParameters.sortBy = 'time';
+        vm.displayQueryParameters.order = 'asc';
+      }else if (priceOptions.value === "1") {
+        vm.displayQueryParameters.sortBy = 'price';
+        vm.displayQueryParameters.order = 'desc';
+      }else if (priceOptions.value === "2") {
+        vm.displayQueryParameters.sortBy = 'price';
+        vm.displayQueryParameters.order = 'asc';
+      }
+      vm.updateDisplayProducts();
+    },
+    // update displayProducts
+    updateDisplayProducts() {
+      const vm = this;
+      this.$router.push({
+        query:{
+          categoryId : vm.displayQueryParameters.categoryId,
+          order: vm.displayQueryParameters.order,
+          sortBy: vm.displayQueryParameters.sortBy
         }
       });
+      let tempProdcuts;
+      // 按類別更新產品
+      // 1. filter product by category
+      if (vm.displayQueryParameters.categoryId === '全部商品') {
+        tempProdcuts = [...vm.allProducts];
+      }else {
+        tempProdcuts = vm.allProducts.filter((product) => product.category === vm.displayQueryParameters.categoryId);
       }
+
+      // 按價格更新商品
+      // 2. sort by
+      const sortBy = vm.displayQueryParameters.sortBy;
+      if (sortBy === 'price') {
+        tempProdcuts = tempProdcuts.sort((product1, product2) => {
+          return product1.price - product2.price;  // 價格低到高排序
+        });
+      } 
+      // 3. order
+      if (vm.displayQueryParameters.order === 'desc') {
+        tempProdcuts = tempProdcuts.reverse();  // 反轉陣列元素
+      }
+      // 4. update displayProduct
+      vm.displayProducts = tempProdcuts;
       vm.updatePagination();
     }
   },
@@ -219,6 +243,7 @@ export default {
   created() {
     this.initAllProducts();
     this.getCategory();
+    this.getParameterValueOfCategoryId();
   }
 }
 </script>
