@@ -20,12 +20,6 @@
               <i class="line" style="width: 80px; left: 13px;"></i>
             </router-link> 
           </li>
-          <li>
-            <router-link to="/discount" class="nav-item">
-              超值優惠
-              <i class="line" style="width: 80px; left: 13px;"></i>
-            </router-link> 
-          </li>
         </ul>
       </div>
     </div>
@@ -34,19 +28,20 @@
       <div class="right-list">
         <ul>
           <li>
-            <router-link to="/login" class="nav-item">
+            <router-link to="/login">
               <i class="fas fa-user-circle"></i>
             </router-link> 
           </li>
           <li>
-            <a href="#">
+            <router-link to="/favorite">
               <i class="fas fa-heart"></i>
-            </a>
+              <span class="favoriteNum" v-show="favorites.length > 0">{{ favorites.length }}</span>
+            </router-link> 
           </li>
           <li>
             <span class="cartModal" @click="showCartModal(true)">
               <i class="fas fa-shopping-cart"></i>
-              <span class="num" v-show="cartProducts.length > 0">{{ cartProducts.length }}</span>
+              <span class="shoppingNum" v-show="cartProducts.length > 0">{{ cartProducts.length }}</span>
             </span>
           </li>
         </ul>
@@ -107,6 +102,9 @@ export default {
   computed: {
     ...mapState('shoppingCart', {
       cartProducts: state => state.cartProducts.reverse()
+    }),
+    ...mapState('favorite', {
+      favorites: state => state.favorites
     })
   },
   created() {
@@ -202,10 +200,26 @@ export default {
           }
         }
 
+        .favoriteNum{
+          display: block;
+          width: 19px;
+          height: 19px;
+          position: absolute;
+          line-height: 15px;
+          border-radius: 50%;
+          font-size: 9px;
+          color: white;
+          background: #cd921e;
+          right: 80px;
+          bottom: 11px;
+          text-align: center;
+          padding-top: 2px;
+        }
+
         .cartModal{
           cursor: pointer;
 
-          .num{
+          .shoppingNum{
             display: inline-block;
             width: 19px;
             height: 19px;
@@ -239,7 +253,7 @@ export default {
           color: #e7e7e5;
           position: absolute;
           left: 269px;
-          top: -19px;
+          top: -20px;
           padding-left: 45px;
         }
 

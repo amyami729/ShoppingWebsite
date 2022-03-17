@@ -17,8 +17,8 @@
         </div>
 
         <div class="card-btn-group">
-          <button class="btn-favorite">
-            <i class="fas fa-heart"></i>
+          <button class="btn-favorite" ref="btnFavorite" @click="updateStatus(product)">
+            <i class="fas fa-heart"  ref="favoriteI"></i>
           </button>
           <button class="btn-cart" @click="addToCart(product.id)">
             <i class="fas fa-shopping-cart"></i>
@@ -30,12 +30,49 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   props: ['product'],
+  data() {
+    return {
+      isSave: false
+    }
+  },
   methods: {
     addToCart(id, qty = 1) {   // ES6.當函式傳進來時,若沒有帶入qty,則會直接使用預設值1
       this.$store.dispatch('shoppingCart/addItemToCart', { id, qty });
+    },
+    updateStatus(item) {
+      const vm = this;
+      vm.isSave = !vm.isSave;
+      if (this.isSave) {
+        vm.$refs.btnFavorite.style.background = 'white';
+        vm.$refs.favoriteI.style.color = 'red';
+        this.$store.dispatch('favorite/addItemToFavorite', item);
+      }else {
+        vm.$refs.btnFavorite.style.background = '';
+        vm.$refs.favoriteI.style.color = '';
+        this.$store.dispatch('favorite/removeFavoriteItem', item);
+      }
     }
+  },
+  computed: {
+    ...mapState('favorite', {
+      favorites: state => state.favorites
+    })
+  },
+  mounted() {
+    this.favorites.forEach((favoriteItem) => {
+      if (this.product.id === favoriteItem.id) {
+        this.isSave = true;
+        this.$refs.btnFavorite.style.background = 'white';
+        this.$refs.favoriteI.style.color = 'red';
+      }
+    });
+  },
+  created() {
+    this.$store.dispatch('favorite/getFavoriteContents');
   }
 }
 </script>
