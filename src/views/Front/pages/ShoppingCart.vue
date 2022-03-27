@@ -115,6 +115,8 @@ export default {
     // 同步更新子組件的數量並且重新加入購物車
     updateItemQty(productInFo) {
       this.checkAll = false;
+      this.checkedNumber = 0;
+      this.checkedTotal = 0;
       const id = productInFo[0];
       const qty = productInFo[1];
       this.$store.dispatch('shoppingCart/updateItemQty', { id, qty });
