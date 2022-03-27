@@ -1,12 +1,19 @@
-import { shallowMount } from '@vue/test-utils';
+// mount和shallowMount的區別？
+// mount僅僅掛載當前組件實例；而shallowMount掛載當前組件實例以外，還會掛載子組件
+import { mount, shallowMount, createLocalVue, createWrapper } from '@vue/test-utils';
 import products from '@/views/Front/pages/Products.vue';
 import axios from 'axios';
 
+// 參考 main.js
+const localVue = createLocalVue();
+localVue.use(VueRouter);
+
+// text1
 test('Check the result of 5 + 2', () => {
   expect(5 + 2).toBe(7)
 });
 
-
+// text2
 test('get category length', () => {
   const mockRoute = {
     query: {
@@ -25,10 +32,5 @@ test('get category length', () => {
       }
     }
   });
-  expect(wrapper.findAll('.product-category').length).toEqual(2)
+  expect(wrapper.findAll('.product-category').length).toEqual(1)
 });
-
-// target: 
-// 1.Vue.use(router)是否可以正確注入$router/$route到prototype
-// 2.注入的$router/$route是否可以成功掛載到組件實例
-// 3.$router/$route是否可以正常獲取參數($route.query)和push($router.push)
