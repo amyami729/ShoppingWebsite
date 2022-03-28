@@ -45,7 +45,7 @@
 
 ## Display
 ### 首頁
-![](https://i.imgur.com/0HaVNIP.jpg)
+![](https://i.imgur.com/UksPyGA.jpg)
 
 ### 產品列表
 ![](https://i.imgur.com/SO1LoX5.jpg)
