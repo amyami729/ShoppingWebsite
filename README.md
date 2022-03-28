@@ -1,9 +1,4 @@
 # ShoppingWebsite
-![](https://storage.googleapis.com/vue-course-api.appspot.com/wenrong/1648378176889.png?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=oezKZ46HX8pmuZVGa7zHhc9oAQwKGLWGpeR8qv5u9CfXSUem090O%2Fc5AnX7eM0dIqRzpONL%2FFCcT6TGd2z2l2Q1Yn3lIlEwIpqtmaTrRvL0xE4KMb5ElPnihfYYLV%2Ft%2BA5io5Qc10i7ptv7V3MTlHaDoAJj5aVU4V8niyQtYQxqLiLAdV1wlE8Izmo6UpOeBujNac27j%2BU%2F9x4JQsbzL74V3IPZENoVmVUjjLJh1dXZEY0fx7daE%2BAyLpJ0Zb4DmYuWO%2F6lrayL%2BPahbaY90McRp7fk2dpNUiYkXMaj%2BLVnH%2B9ZmG%2BEKopihlR%2FfqkYsv%2FdGiu65XMPTKgcVVlMAiA%3D%3D)
-
-## Demo
-
-
 ## Introduction
 - 使用 Vue 實作購物網站功能，串接後端 API 所提供資訊
 - 使用 Vue Router 處理網頁路徑並渲染頁面
@@ -38,22 +33,34 @@
     - 優惠劵新增、編輯、刪除
 
 ## Skill
-- HTML5、CSS3、Javascript
-- SCSS
-- Vue Cli 3
-- Vue Router
-- Vuex
-- Bootstrap 4
-- RESTful API
-- Git
-- Ajax
-- jQuery
-- Jest 單元測試
-- Vue 插件: vue-loading-overlay (載入效果)、vee-validate (表單驗證)、AOS (頁面滾動動畫)、Font Awesome（圖標）
+- Language: Javascript
+- Framework: Vue, Vuex, Bootstrap 4
+- Other: HTML5, CSS3, SCSS, Git, Ajax, Webpack, RESTful API, Jest
+
+## Use plugins
+- vue-loading-overlay (載入效果)
+- vee-validate (表單驗證)
+- AOS (頁面滾動動畫)
+- Font Awesome（圖標）
 
 ## Display
 ### 首頁
+![](https://i.imgur.com/0HaVNIP.jpg)
 
 ### 產品列表
+![](https://i.imgur.com/SO1LoX5.jpg)
+
 ### 單品詳細頁
-### 結帳頁面
+![](https://i.imgur.com/Q22hpGr.jpg)
+
+### 收藏清單
+![](https://i.imgur.com/BcHfvzm.png)
+
+### 購物車
+![](https://i.imgur.com/G2tfXwh.png)
+
+### 後台管理者登入
+![](https://i.imgur.com/cD9EP6v.png)
+
+### 後台管理系統
+![](https://i.imgur.com/6ATBsc4.png)
