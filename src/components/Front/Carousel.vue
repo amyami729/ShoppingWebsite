@@ -25,7 +25,6 @@
 import { ref, onMounted } from 'vue'
 
 export default {
-  // props: ['startAutoPlay', 'timeout', 'navigation', 'pagination'],
   setup() {
     //ref 方法用來建立一個響應式的資料物件，該物件包含一個 value 屬性，值為響應式資料本身
     const currentSlide = ref(1);   //用來顯示當前圖片是第幾張
