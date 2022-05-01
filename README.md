@@ -1,7 +1,6 @@
 # ShoppingWebsite
 ## Introduction
 - 使用 Vue 實作購物網站功能，串接後端 API 所提供資訊
-- 使用 Vue Router 處理網頁路徑並渲染頁面
 - 使用 Vuex 管理購物車清單的商品
 - 使用 localStorage 存放收藏清單的資料
 
@@ -35,7 +34,7 @@
 ## Skill
 - Language: Javascript
 - Framework: Vue, Vuex, Bootstrap 4
-- Other: HTML5, CSS3, SCSS, Git, Ajax, Webpack, RESTful API, Jest
+- Other: HTML5, CSS3, SCSS, Git, Ajax
 
 ## Use plugins
 - vue-loading-overlay (載入效果)
