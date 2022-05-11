@@ -60,21 +60,41 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@mixin Width-Height($Wsize, $Hsize) {
+  width: $Wsize;
+  height: $Hsize;
+};
+@mixin desktop {
+  @media screen and (max-width: 767px){
+    @content
+  }
+};
+
 .footerMessage{
-  width: 1124px;
+  @include Width-Height(1124px, 285px);
   margin: 0 auto;
-  height: 285px;
   background: #616161;
+  @include desktop() {
+    width: 100%;
+  }
 
   .simpleMessage{
     float: left;
-    width: 320px;
-    height: 285px;
+    @include Width-Height(320px, 285px);
+    @include desktop() {
+      @include Width-Height(100%, 130px);
+    }
 
     .logo{
       height: 110px;
       padding-top: 65px;
       padding-left: 32px;
+      @include desktop() {
+        padding-top: 20px;
+        padding-left: 0;
+        height: 82px;
+        text-align: center;
+      }
     }
 
     p{
@@ -82,23 +102,36 @@ export default {
       padding-left: 32px;
       font-size: 16px;
       color: #ffffff;
+      @include desktop() {
+        padding-top: 0;
+        padding-left: 0;
+        text-align: center;
+        font-size: 18px;
+      }
     }
   }
 
   .contactMessage{
     float: right;
-    width: 804px;
-    height: 285px;
+    @include Width-Height(804px, 285px);
+    @include desktop() {
+      height: 156px;
+    }
 
     .contact{
       float: left;
-      width: 650px;
-      height: 285px;
+      @include Width-Height(650px, 285px);
+      @include desktop() {
+        height: 0;
+      }
 
       .title{
         height: 110px;
         padding-left: 570px;
         padding-top: 83px;
+        @include desktop() {
+          display: none;
+        }
 
         span{
           font-size: 20px;
@@ -108,6 +141,9 @@ export default {
 
       .envelope{
         height: 55px;
+        @include desktop() {
+          margin-top: 30px;
+        }
 
         p{
           float: left;
@@ -116,14 +152,16 @@ export default {
           margin-left: 415px;
           margin-top: 20px;
           color: #ffffff;
+          @include desktop() {
+            margin-left: 432px;
+          }
         }
 
         .envelope-logo{
           float: right;
           margin-right: 1px;
           margin-top: 20px;
-          width: 25px;
-          height: 25px;
+          @include Width-Height(25px, 25px);
           background: #ffffff;
           border-radius: 20%;
 
@@ -145,6 +183,10 @@ export default {
 
       .phone{
         height: 120px;
+        @include desktop() {
+          height: 0;
+        }
+        
 
         p{
           float: left;
@@ -153,14 +195,16 @@ export default {
           margin-left: 498px;
           margin-top: 5px;
           color: #ffffff;
+          @include desktop() {
+            margin-left: 515px;
+          }
         }
 
         .phone-logo{
           float: right;
           margin-right: 1px;
           margin-top: 5px;
-          width: 25px;
-          height: 25px;
+          @include Width-Height(25px, 25px);
           background: #ffffff;
           border-radius: 20%;
 
@@ -187,24 +231,29 @@ export default {
 
       &:hover{
         transition: 1s; /* 定義旋轉過渡時間 */
-        transform:rotate(-180deg); /* 定義旋轉的角度 */
+        transform: rotate(-180deg); /* 定義旋轉的角度 */
         /* 兼容處理 */
-        -ms-transform:rotate(-180deg); /* IE 9 */
-        -moz-transform:rotate(-180deg); /* Firefox */
-        -webkit-transform:rotate(-180deg); /* Safari and Chrome */
-        -o-transform:rotate(-180deg); /* Opera */
+        -ms-transform: rotate(-180deg); /* IE 9 */
+        -moz-transform: rotate(-180deg); /* Firefox */
+        -webkit-transform: rotate(-180deg); /* Safari and Chrome */
+        -o-transform: rotate(-180deg); /* Opera */
       }
     }
 
     .follow{
       float: right;
-      width: 154px;
-      height: 285px;
+      @include Width-Height(154px, 285px);
+      @include desktop() {
+        height: 0;
+      }
 
       .title{
         height: 110px;
         padding-left: 43px;
         padding-top: 83px;
+        @include desktop() {
+          display: none;
+        }
 
         span{
           font-size: 20px;
@@ -214,13 +263,15 @@ export default {
 
       .aboveSocial{
         height: 55px;
+        @include desktop() {
+          margin-top: 30px;
+        }
 
         .instagram-logo{
           float: left;
           margin-top: 20px;
           margin-left: 43px;
-          width: 25px;
-          height: 25px;
+          @include Width-Height(25px, 25px);
           background: #ffffff;
           border-radius: 20%;
 
@@ -239,8 +290,7 @@ export default {
           float: right;
           margin-right: 32px;
           margin-top: 20px;
-          width: 25px;
-          height: 25px;
+          @include Width-Height(25px, 25px);
           background: #ffffff;
           border-radius: 5px;
 
@@ -258,13 +308,15 @@ export default {
 
       .belowSocial{
         height: 120px;
+        @include desktop() {
+          height: 0;
+        }
 
         .facebook-logo{
           float: left;
           margin-top: 11px;
           margin-left: 43px;
-          width: 25px;
-          height: 25px;
+          @include Width-Height(25px, 25px);
           background: #ffffff;
           border-radius: 5px;
 
@@ -288,8 +340,7 @@ export default {
         float: right;
         margin-right: 32px;
         margin-top: 11px;
-        width: 25px;
-        height: 25px;
+        @include Width-Height(25px, 25px);
         background: #ffffff;
         border-radius: 5px;
 
@@ -312,9 +363,11 @@ export default {
 }
 
 .copyright{
-  width: 1124px;
+  @include Width-Height(1124px, 55px);
   margin: 0 auto;
-  height: 55px;
+  @include desktop() {
+    width: 100%;
+  }
 
   p{
     width: 610px;
@@ -322,6 +375,11 @@ export default {
     margin-left: 270px;
     font-size: 18px;
     color: #616161;
+    @include desktop() {
+      @include Width-Height(100%, 80px);
+      margin-left: 0;
+      text-align: center;
+    }
   }
 }
 </style>

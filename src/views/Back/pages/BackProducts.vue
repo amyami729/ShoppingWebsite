@@ -8,33 +8,7 @@
     <table class="table">
       <thead>
         <tr>
-          <th class="d-md-table-cell d-none">
-            <li class="nav-item dropdown position-static">
-              <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                分類
-              </a>
-              <ul class="dropdown-menu shadow rounded" aria-labelledby="navbarDropdown">
-                <li class="mx-3 my-2">
-                  <a class="dropdown-item mb-0" href="#" @click.prevent="getSelectKind('金屬椅')">金屬椅</a>
-                </li>
-                <li class="mx-3 my-2">
-                  <a class="dropdown-item mb-0" href="#" @click.prevent="getSelectKind('木椅')">木椅</a>
-                </li>
-                <li class="mx-3 my-2">
-                  <a class="dropdown-item mb-0" href="#" @click.prevent="getSelectKind('特色推薦')">特色推薦</a>
-                </li>
-                <li class="mx-3 my-2">
-                  <a class="dropdown-item mb-0" href="#" @click.prevent="getSelectKind('經典設計')">經典設計</a>
-                </li>
-                <li class="mx-3 my-2">
-                  <a class="dropdown-item mb-0" href="#" @click.prevent="getSelectKind('沙發')">沙發</a>
-                </li>
-                <li class="mx-3 my-2">
-                  <a class="dropdown-item mb-0" href="#" @click.prevent="getSelectKind('塑膠椅')">塑膠椅</a>
-                </li>
-              </ul>
-            </li>
-          </th>
+          <th class="d-md-table-cell d-none">分類</th>
           <th>產品圖片</th>
           <th>產品名稱</th>
           <th class="d-lg-table-cell d-none">原價</th>

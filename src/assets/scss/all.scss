@@ -1,14 +1,6 @@
-//導入 指向node_modules 裡的 _functions.scss
-//bootstrap套用變數的方法
 @import "~bootstrap/scss/functions";
-
-//導入 _variables.scss
-//可讓我們自定義的變數
 @import "./helpers/variables";
-
-//導入 指向node_modules 裡的 bootstrap.scss
-//導入資源
 @import "~bootstrap/scss/bootstrap";
 
+
 @import "./_back-dashboard";
-@import "./_back-products";

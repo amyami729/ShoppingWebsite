@@ -167,6 +167,34 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@mixin Width-Height($Wsize, $Hsize) {
+  width: $Wsize;
+  height: $Hsize;
+}
+@mixin checkbox($margin-top, $margin-left) {
+	input[type=checkbox] {
+    @include Width-Height(21px, 21px);
+    position: relative;
+    margin-top: $margin-top;
+    margin-left: $margin-left;
+  }
+  input[type=checkbox]:after {
+    position: absolute;
+    @include Width-Height(21px, 21px);
+    display: inline-block;
+    visibility: visible;
+    border-radius: 3px;
+  }
+  input[type=checkbox]:checked:after {
+    content: "✓";
+    font-size: 15px;
+    background-color: #ff0000;
+    color: #fff;
+    padding: 0 4px;
+    font-weight: bold;
+  }
+}
+
 .shoppingCart{
   width: 1124px;
   margin: 0 auto;
@@ -188,43 +216,17 @@ export default {
 
     .listTitleLeft{
       float: left;
-      width: 583px;
-      height: 58px;
+      @include Width-Height(583px, 58px);
 
       .checkboxTitle{
         float: left;
-        width: 50px;
-        height: 60px;
-
-        input[type=checkbox] {
-          width: 21px;
-          height: 21px;
-          position: relative;
-          margin-top: 20px;
-          margin-left: 13px;
-        }
-        input[type=checkbox]:after {
-          position: absolute;
-          width: 21px;
-          height: 21px;
-          display: inline-block;
-          visibility: visible;
-          border-radius: 3px;
-        }
-        input[type=checkbox]:checked:after {
-          content: "✓";
-          font-size: 15px;
-          background-color: #ff0000;
-          color: #fff;
-          padding: 0 4px;
-          font-weight: bold;
-        }
+        @include Width-Height(50px, 60px);
+        @include checkbox(20px, 13px);
       }
 
       .productMessageTitle{
         float: right;
-        width: 533px;
-        height: 58px;
+        @include Width-Height(533px, 58px);
         color: #616161;
         font-size: 18px;
 
@@ -244,13 +246,11 @@ export default {
 
     .listTitleRight{
       float: right;
-      width: 539px;
-      height: 58px;
+      @include Width-Height(539px, 58px);
 
       .otherTitleLeft{
         float: left;
-        width: 250px;
-        height: 58px;
+        @include Width-Height(250px, 58px);
 
         .quantity{
           margin-top: 16px;
@@ -262,8 +262,7 @@ export default {
 
       .otherTitleRight{
         float: right;
-        width: 289px;
-        height: 58px;
+        @include Width-Height(289px, 58px);
         color: #616161;
         font-size: 18px;
 
@@ -283,63 +282,34 @@ export default {
   }
 
   .cartList{
-    width: 1124px;
-    height: 109px;
+    @include Width-Height(1124px, 109px);
     box-shadow: 3px 0px 8px 0px #c4c4c4;
     margin-top: 15px;
     margin-bottom: 15px;
 
     .cartListInfo{
       float: left;
-      width: 395px;
-      height: 107px;
+      @include Width-Height(395px, 107px);
 
       .checkbox{
         float: left;
-        width: 50px;
-        height: 107px;
-
-        input[type=checkbox] {
-          width: 21px;
-          height: 21px;
-          position: relative;
-          margin-top: 43px;
-          margin-left: 13px;
-        }
-        input[type=checkbox]:after {
-          position: absolute;
-          width: 21px;
-          height: 21px;
-          display: inline-block;
-          visibility: visible;
-          border-radius: 3px;
-        }
-        input[type=checkbox]:checked:after {
-          content: "✓";
-          font-size: 15px;
-          background-color: #ff0000;
-          color: #fff;
-          padding: 0 4px;
-          font-weight: bold;
-        }
+        @include Width-Height(50px, 107px);
+        @include checkbox(43px, 13px);
       }
 
       .productMessage{
         float: right;
-        width: 335px;
-        height: 107px;
+        @include Width-Height(335px, 107px);
 
         img{
           float: left;
-          width: 100px;
-          height: 75px;
+          @include Width-Height(100px, 75px);
           margin-top: 16px;
         }
 
         .productTitle{
           float: right;
-          width: 200px;
-          height: 45px;
+          @include Width-Height(200px, 45px);
           margin-top: 32px;
           margin-right: 15px;
           color: #616161;
@@ -356,13 +326,11 @@ export default {
 
     .cartListOther{
       float: right;
-      width: 690px;
-      height: 107px;
+      @include Width-Height(690px, 107px);
 
       .otherLeft{
         float: left;
-        width: 400px;
-        height: 107px;
+        @include Width-Height(400px, 107px);
 
         .originalPrice{
           float: left;
@@ -374,8 +342,7 @@ export default {
 
         .cartControl{
           float: right;
-          width: 250px;
-          height: 107px;
+          @include Width-Height(250px, 107px);
           padding-top: 30px;
           padding-left: 10px;
         }
@@ -383,8 +350,7 @@ export default {
 
       .otherRight{
         float: right;
-        width: 290px;
-        height: 107px;
+        @include Width-Height(290px, 107px);
 
         .totalPrice{
           float: left;
@@ -397,8 +363,7 @@ export default {
 
         .deleteBtn{
           float: right;
-          width: 45px;
-          height: 45px;
+          @include Width-Height(45px, 45px);
           border: 1px solid #ef4c2f;
           margin-top: 32px;
           margin-right: 30px;
@@ -421,8 +386,7 @@ export default {
   }
 
   .cartCheckoutInfo{
-    width: 1124px;
-    height: 150px;
+    @include Width-Height(1124px, 150px);
     background: white;
     margin-bottom: 50px;
     box-shadow: 3px 3px 15px 0px #c4c4c4;
@@ -435,8 +399,7 @@ export default {
 
       .couponUsageInput{
         float: left;
-        width: 250px;
-        height: 50px;
+        @include Width-Height(250px, 50px);
         padding-left: 15px;
         font-size: 16px;
         border: #c6c6c6;
@@ -452,8 +415,7 @@ export default {
 
       .UsageBtn{
         float: right;
-        width: 70px;
-        height: 50px;
+        @include Width-Height(70px, 50px);
         background: #616161;
         padding-top: 12px;
         margin-right: 30px;
@@ -477,31 +439,8 @@ export default {
 
       .checkoutLeft{
         float: left;
-        width: 300px;
-        height: 70px;
-
-        input[type=checkbox] {
-          width: 18px;
-          height: 18px;
-          position: relative;
-          margin-top: 25px;
-          margin-left: 15px;
-        }
-        input[type=checkbox]:after {
-          position: absolute;
-          width: 20px;
-          height: 21px;
-          visibility: visible; 
-          border-radius: 3px;
-        }
-        input[type=checkbox]:checked:after {
-          content: "✓";
-          font-size: 15px;
-          background-color: #ff0000;
-          color: #fff;
-          padding: 0 4px;
-          font-weight: bold;
-        }
+        @include Width-Height(300px, 70px);
+        @include checkbox(25px, 15px);
 
         .selectAll{
           float: right;
@@ -515,8 +454,7 @@ export default {
 
       .checkoutRight{
         float: right;
-        width: 500px;
-        height: 70px;
+        @include Width-Height(500px, 70px);
 
         .productstotalPrice{
           float: left;
@@ -544,8 +482,7 @@ export default {
 
         .checkoutBtn{
           float: right;
-          width: 200px;
-          height: 40px;
+          @include Width-Height(200px, 40px);
           background: #a67e65;
           padding-top: 7px;
           margin-right: 30px;
@@ -582,8 +519,7 @@ export default {
     }
 
     .jumpPage{
-      width: 120px;
-      height: 25px;
+      @include Width-Height(120px, 25px);
       background: #ef4c2f;
       margin-left: 502px;
 

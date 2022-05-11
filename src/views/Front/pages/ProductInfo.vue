@@ -95,6 +95,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@mixin Width-Height($Wsize, $Hsize) {
+  width: $Wsize;
+  height: $Hsize;
+}
+
 .productInfo{
   width: 1124px;
   margin: 0 auto;
@@ -128,19 +133,16 @@ export default {
       margin-right: 32px;
 
       img{
-        width: 540px;
-        height: 600px;
+        @include Width-Height(540px, 600px);
       }
     }
 
     .productDescription{
       float: right;
-      width: 552px;
-      height: 718px;
+      @include Width-Height(552px, 718px);
 
       .productCategory{
-        width: 98px;
-        height: 32px;
+        @include Width-Height(98px, 32px);
         font-size: 20px;
         text-align: center;
         padding-top: 2px;
@@ -150,8 +152,7 @@ export default {
       }
 
       .productTitle{
-        width: 552px;
-        height: 30px;
+        @include Width-Height(552px, 30px);
         font-size: 25px;
         color: #616161;
         margin: 30px 0 48px 0;
@@ -160,8 +161,7 @@ export default {
       }
 
       .producPrice{
-        width: 552px;
-        height: 60px;
+        @include Width-Height(552px, 60px);
         border: 1px solid #c4c4c4;
         padding-top: 6px;
 
@@ -240,8 +240,7 @@ export default {
 
         .addCartBtn{
           float: left;
-          width: 260px;
-          height: 60px;
+          @include Width-Height(260px, 60px);
           border: 1px solid #909090;
           background: #fff;
           color: #909090;
@@ -270,8 +269,7 @@ export default {
 
         .buy{
           float: right;
-          width: 260px;
-          height: 60px;
+          @include Width-Height(260px, 60px);
           background: #c2987b;
           cursor: pointer;
 
