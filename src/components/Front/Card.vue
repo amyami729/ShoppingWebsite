@@ -78,20 +78,37 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@mixin Width-Height($Wsize, $Hsize) {
+  width: $Wsize;
+  height: $Hsize;
+};
+@mixin desktop {
+  @media screen and (max-width: 767px){
+    @content
+  }
+};
+
 .card{
-  width: 260px;
-  height: 370px;
+  @include Width-Height(260px, 370px);
   margin-top: 15px;
+  @include desktop() {
+    width: 90%;
+    margin: 10% auto;
+    margin-top: 5%;
+  }
   
   .card-img-link{
     overflow: hidden;
 
     img{
       padding: 13px;
-      width: 258px;
-      height: 279px;
+      @include Width-Height(258px, 279px);
       transform: scale(1,1);
       transition: all 0.5s ease-out;
+      @include desktop() {
+        width: 100%;
+        margin: auto;
+      }
 
       &:hover{
         transform: scale(1.2,1.2);
@@ -102,6 +119,9 @@ export default {
   .card-body{
     height: 60px;
     padding-top: 1px;
+    @include desktop() {
+      height: 90px;
+    }
 
     .card-ti{
       height: 35px;
@@ -117,10 +137,13 @@ export default {
           color: #616161;
 
           display: -webkit-box;   /* 將對象作為彈性伸縮盒子模型顯示 */
-            -webkit-box-orient: vertical;   /* 設置或檢索伸縮盒子的子元素排列方式 */
-            -webkit-line-clamp: 2;   /* 用來定義塊元素顯示文本行數 */
-            overflow: hidden;  /* 超出文字隱藏 */
-            text-overflow: ellipsis;  /* 內容超出時,在後方補上逗號 */
+          -webkit-box-orient: vertical;   /* 設置或檢索伸縮盒子的子元素排列方式 */
+          -webkit-line-clamp: 2;   /* 用來定義塊元素顯示文本行數 */
+          overflow: hidden;  /* 超出文字隱藏 */
+          text-overflow: ellipsis;  /* 內容超出時,在後方補上逗號 */
+          @include desktop() {
+            font-size: 17px;
+          }
 
           &:hover{
             color: black;
@@ -152,8 +175,7 @@ export default {
     }
 
     .card-btn-group{
-      width: 95px;
-      height: 35px;
+      @include Width-Height(95px, 35px);
       margin-top: 6px;
       float: right;
 

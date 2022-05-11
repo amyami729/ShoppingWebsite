@@ -12,7 +12,9 @@
 
     <div class="banner">
       <img src="@/assets/img/banner.png" alt="">
-      <p class="receive-discount">立即領取</p> 
+      <div class="receive-discount">
+        <p>立即領取</p> 
+      </div>
     </div>
 
     <div class="featured-list">
@@ -145,42 +147,75 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@mixin Width-Height($Wsize, $Hsize) {
+  width: $Wsize;
+  height: $Hsize;
+};
+@mixin desktop {
+  @media screen and (max-width: 767px){
+    @content
+  }
+};
+
 .home{
   width: 1124px;
   margin: 0 auto;
+  @include desktop() {
+    width: 100%;
+    padding: 0 10px;
+  }
 
   .carousel{
     position: relative;
 
     img{
-      width: 1124px;
-      height: 396px;
+      @include Width-Height(1124px, 396px);
       object-fit: cover;
-      -webkit-user-drag:none;  //禁止图片拖动
+      -webkit-user-drag: none;  //禁止圖片拖動
+      @include desktop() {
+        @include Width-Height(100%, 100%);
+      }
     }
   }
 
   .banner{
     margin: 60px 0 46px;
     position: relative;
+    @include desktop() {
+      margin: 25px 0 18px
+    }
 
     img{
-      width: 1124px;
-      height: 100px;
-      -webkit-user-drag:none;
+      @include Width-Height(1124px, 100px);
+      -webkit-user-drag: none;
+      @include desktop() {
+        @include Width-Height(100%, 100%);
+      }
     }
 
     .receive-discount{
       position: absolute;
-      width: 130px;
-      height: 45px;
+      @include Width-Height(130px, 45px);
       background: #88644e;
       text-align: center;
-      color: #ffffff;
-      padding-top: 12.6px;
+      display: table;
       left: 960px;
       top: 28px;
       text-decoration: none;
+      @include desktop() {
+        left: 75%;
+        top: 20%;
+        @include Width-Height(20%, 60%);
+      }
+
+      p{
+        color: #ffffff;
+        display: table-cell;
+        vertical-align: middle;
+        @include desktop() {
+          font-size: 13px;
+        }
+      }
 
       &:hover{
         opacity: 0.8;
@@ -190,10 +225,17 @@ export default {
 
   .featured-list{
     height: 410px;
+    @include desktop() {
+      height: 100%;
+    }
     
     span{
       color: #616161;
       font-size: 20px;
+      @include desktop() {
+        font-size: 16px;
+        display: block;
+      }
 
       i{
         padding-right: 5px;
@@ -203,6 +245,10 @@ export default {
         margin-left: 860px;
         text-decoration: none;
         color: #a67e65;
+        @include desktop() {
+          margin-left: 0;
+          float: right;
+        }
 
         &:hover{
           color: #88644e;
@@ -212,6 +258,10 @@ export default {
     .card-wrapper{
       margin-right: 28px;
       display: inline-block;
+      @include desktop() {
+        margin-right: 0;
+        display: block;
+      }
 
       &:nth-child(5){
         margin-right: 0;
@@ -228,11 +278,18 @@ export default {
       width: 375px;
       background: #c49d81;
       opacity: 0.8;
+      @include desktop() {
+        float: left;
+        width: 60%;
+      }
 
       p{
         color: #ffffff;
         padding: 80px 50px 10px 30px;
         font-size: 37px;
+        @include desktop() {
+          font-size: 25px;
+        }
       }
 
       span{
@@ -268,11 +325,19 @@ export default {
       width: 375px;
       background: #9b9b9b;
       opacity: 0.8;
+      @include desktop() {
+        float: right;
+        margin-left: 40%;
+        width: 60%;
+      }
 
       p{
         color: #ffffff;
         padding: 80px 50px 10px 30px;
         font-size: 37px;
+        @include desktop() {
+          font-size: 25px;
+        }
       }
 
       span{
@@ -303,7 +368,7 @@ export default {
     margin: 0 0 60px;
     height: 280px;
     background: linear-gradient(rgba(97,97,97,.6),rgba(97,97,97,.6)) no-repeat top/cover fixed,
-    url(../../../assets/img/newsletter-background.png) no-repeat 50%/150% fixed;
+    url(../../../assets/img/newsletter-background.png) no-repeat 50%/150% fixed;    
 
     .title{
       height: 140px;
@@ -313,6 +378,9 @@ export default {
         padding-top: 48px;
         font-size: 35px;
         color: white;
+        @include desktop() {
+          font-size: 26px;
+        }
       }
 
       p{
@@ -321,6 +389,9 @@ export default {
         font-size: 25px;
         padding-top: 8px;
         color: white;
+        @include desktop() {
+          font-size: 21px;
+        }
       }
     }
 
@@ -331,10 +402,14 @@ export default {
         height: 68px;
 
         .form-control{
-          width: 500px;
-          height: 45px;
+          @include Width-Height(500px, 45px);
           margin-left: 274px;
           margin-top: 22px;
+          @include desktop() {
+            @include Width-Height(50%, 60%);
+            margin-left: 15%;
+            margin-top: 10%;
+          }
         }
 
         .subscription{
@@ -343,8 +418,12 @@ export default {
           color: white;
           margin-left: 774px;
           margin-top: 22px;
-          width: 80px;
-          height: 45px;
+          @include Width-Height(80px, 45px);
+          @include desktop() {
+            margin-left: 0;
+            margin-top: 9%;
+            right: 15%;
+          }
 
           &:hover{
             background: #89644f;
@@ -367,10 +446,12 @@ export default {
     position: absolute;
     margin-left: 545px;
     margin-top: 247px;
-    width: 35px;
-    height: 38px;
+    @include Width-Height(35px, 38px);
     background: white;
     cursor: pointer;
+    @include desktop() {
+      display: none;
+    }
 
     i{
       display: block;
