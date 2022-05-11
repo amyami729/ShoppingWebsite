@@ -18,7 +18,6 @@ export default {
     }
   },
   computed: {
-    // 将 store 中的 getter 映射到局部计算属性
     ...mapGetters('alertModules', ['messages']),
   }
 };

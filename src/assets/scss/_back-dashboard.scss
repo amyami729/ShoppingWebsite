@@ -2,16 +2,6 @@ body {
   font-size: .875rem;
 }
 
-// ::-moz-selection { /* Code for Firefox */
-//   color: #616161;
-//   background: yellow;
-// }
-
-// ::selection {
-//   color: #616161;
-//   background: yellow;
-// }
-
 .feather {
   width: 16px;
   height: 16px;
@@ -25,11 +15,7 @@ body {
 .sidebar {
   position: fixed;
   top: 0;
-  /* rtl:raw:
-  right: 0;
-  */
   bottom: 0;
-  /* rtl:remove */
   left: 0;
   z-index: 100; /* Behind the navbar */
   padding: 48px 0 0; /* Height of navbar */

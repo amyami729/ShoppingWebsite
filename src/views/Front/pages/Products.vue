@@ -69,7 +69,7 @@ export default {
       },
       allProducts: [],
       displayProducts: [],   // 用來存放最後展示的產品
-      allCategory: [],
+      allCategory: ['全部商品', '特色推薦', '經典設計', '木椅', '塑膠椅', '金屬椅', '沙發'],
       currentCategory: '全部商品',
       categoryId: '',
       pagination: {},   // 撈頁碼數
@@ -132,13 +132,6 @@ export default {
     getProductsByPage(page = 1, prodcuts = []) {
       const numberOfProductsInPage = 12;
       return prodcuts.slice(page * numberOfProductsInPage - numberOfProductsInPage, page * numberOfProductsInPage);
-    },
-    getCategory() {
-      const vm = this;
-      const api = `${process.env.VUE_APP_CATEGORYAPI}/api/product/category`;  // 取得產品分類
-      this.$http.get(api).then((response) => {
-        vm.allCategory = response.data;
-      });
     },
     // 按搜尋獲取產品
     getProductsBySearch() {
@@ -242,7 +235,6 @@ export default {
   },
   created() {
     this.initAllProducts();
-    this.getCategory();
     this.getParameterValueOfCategoryId();
   }
 }
