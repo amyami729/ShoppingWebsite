@@ -3,6 +3,7 @@
 - 使用 Vue 實作購物網站功能，串接後端 API 所提供資訊
 - 使用 Vuex 管理購物車清單的商品
 - 使用 localStorage 存放收藏清單的資料
+- 使用 RWD 響應式開發，讓版面能適應行動裝置
 
 ## Features
 - 前台
@@ -34,7 +35,7 @@
 ## Skill
 - Language: Javascript
 - Framework: Vue, Vuex, Bootstrap 4
-- Other: HTML5, CSS3, SCSS, Git, Ajax
+- Other: HTML5, CSS3, RWD, SCSS, Ajax
 
 ## Use plugins
 - vue-loading-overlay (載入效果)
@@ -63,3 +64,6 @@
 
 ### 後台管理系統
 ![](https://i.imgur.com/6ATBsc4.png)
+
+### RWD響應式開發
+![](https://j.gifs.com/A6oLJB.gif)
