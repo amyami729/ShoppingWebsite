@@ -18,9 +18,9 @@
 
         <div class="card-btn-group">
           <button class="btn-favorite" ref="btnFavorite" @click="updateStatus(product)">
-            <i class="fas fa-heart"  ref="favoriteI"></i>
+            <i class="fas fa-heart" ref="favoriteI"></i>
           </button>
-          <button class="btn-cart" @click="addToCart(product.id)">
+          <button class="btn-cart" @click="addToCart(product)">
             <i class="fas fa-shopping-cart"></i>
           </button>
         </div>
@@ -40,8 +40,8 @@ export default {
     }
   },
   methods: {
-    addToCart(id, qty = 1) {   // ES6.當函式傳進來時,若沒有帶入qty,則會直接使用預設值1
-      this.$store.dispatch('shoppingCart/addItemToCart', { id, qty });
+    addToCart(item, qty = 1) {
+      this.$store.dispatch('shoppingCart/addToCart', { item, qty });
     },
     updateStatus(item) {
       const vm = this;
@@ -49,11 +49,11 @@ export default {
       if (this.isSave) {
         vm.$refs.btnFavorite.style.background = 'white';
         vm.$refs.favoriteI.style.color = 'red';
-        this.$store.dispatch('favorite/addItemToFavorite', item);
+        this.$store.dispatch('favorite/addToFavorite', item);
       }else {
         vm.$refs.btnFavorite.style.background = '';
         vm.$refs.favoriteI.style.color = '';
-        this.$store.dispatch('favorite/removeFavoriteItem', item);
+        this.$store.dispatch('favorite/removeFavorite', item);
       }
     }
   },
@@ -82,6 +82,13 @@ export default {
   width: $Wsize;
   height: $Hsize;
 };
+@mixin cardBtn($color) {
+  background: $color;
+  border: 1px solid $color;
+  width: 40px;
+  padding-top: 4px;
+  font-size: 20px;
+};
 @mixin desktop {
   @media screen and (max-width: 767px){
     @content
@@ -107,7 +114,6 @@ export default {
       transition: all 0.5s ease-out;
       @include desktop() {
         width: 100%;
-        margin: auto;
       }
 
       &:hover{
@@ -181,12 +187,7 @@ export default {
 
       .btn-favorite{
         margin-right: 5px;
-        background: #909090;
-        border: 1px solid #909090;
-        width: 40px;
-        padding-left: 6px;
-        padding-top: 4px;
-        font-size: 20px;
+        @include cardBtn(#909090);
 
         &:hover{
           background: #616161;
@@ -194,12 +195,7 @@ export default {
       }
 
       .btn-cart{
-        background: #c2987b;
-        border: 1px solid #c2987b;
-        width: 40px;
-        padding-left: 4px;
-        padding-top: 4px;
-        font-size: 20px;
+        @include cardBtn(#c2987b);
 
         &:hover{
           background: #a77e66;
@@ -207,6 +203,8 @@ export default {
       }
     
       i{
+        vertical-align: middle;
+        margin-top: -7px;
         font-size: 20px;
         color: #ffffff;
       }

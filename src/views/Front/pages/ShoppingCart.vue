@@ -42,11 +42,11 @@
           <div class="otherLeft">
             <span class="originalPrice">{{ $filters.currency(item.price) }}</span>
             <!-- 購物車數量鈕 -->
-            <cartControl class="cartControl" :inputQty="item.quantity" :productId="item.id" @emitUpdateItemQty="updateItemQty"></cartControl>
+            <cartControl class="cartControl" :inputQty="Number(item.qty)" :product="item" @emitUpdateItemQty="updateItemQty"></cartControl>
           </div>
           <div class="otherRight">
             <span class="totalPrice">{{ $filters.currency(item.total) }}</span>
-            <div class="deleteBtn" @click="removeCartItem(item.id)">
+            <div class="deleteBtn" @click="removeCart(item)">
               <i class="fas fa-trash"></i>
             </div>
           </div>
@@ -80,7 +80,9 @@
     </div>
 
     <div class="shopCart-otherContent" v-else>
-      <img src="@/assets/img/empty_cart.png" alt="" class="emptyCart-logo">
+      <div class="emptyCart-box">
+        <img src="@/assets/img/empty.png" alt="" class="emptyCart-logo">
+      </div>
       <p>你的購物車是空的ㄛ</p>
       <div class="jumpPage">
         <router-link to="/products?categoryId=全部商品" class="goToPageBtn">去購物吧!</router-link>
@@ -105,21 +107,18 @@ export default {
     }
   },
   methods: {
-    removeCartItem(id) {
+    removeCart(item) {
       this.checkAll = false;
-      const api = `${process.env.VUE_APP_CARTAPI}/api/cart/${id}`;  // 刪除某一筆購物車資料
-      this.$http.delete(api).then(() => {
-        this.$store.dispatch('shoppingCart/getCartContents');
-      });
+      this.$store.dispatch('shoppingCart/removeCart', item);
     },
     // 同步更新子組件的數量並且重新加入購物車
     updateItemQty(productInFo) {
       this.checkAll = false;
       this.checkedNumber = 0;
       this.checkedTotal = 0;
-      const id = productInFo[0];
+      const item = productInFo[0];
       const qty = productInFo[1];
-      this.$store.dispatch('shoppingCart/updateItemQty', { id, qty });
+      this.$store.dispatch('shoppingCart/updateToCart', { item, qty });
     },
     // 全選/反選的處理
     clickCheckAll() {
@@ -157,7 +156,7 @@ export default {
   },
   computed: {
     ...mapState('shoppingCart', {
-      cartProducts: state => state.cartProducts
+      cartProducts: state => state.carts
     })
   },
   created() {
@@ -193,20 +192,36 @@ export default {
     padding: 0 4px;
     font-weight: bold;
   }
-}
+};
+@mixin desktop {
+  @media screen and (max-width: 767px){
+    @content
+  }
+};
 
 .shoppingCart{
   width: 1124px;
   margin: 0 auto;
+  @include desktop() {
+    width: 100%;
+    padding: 0 10px;
+  }
 
   .shopCartTop{
     height: 90px;
+    @include desktop() {
+      height: 60px;
+    }
 
     .cartTitle{
       text-align: center;
       font-size: 30px;
       color: #616161;
       padding-top: 16px;
+      @include desktop() {
+        font-size: 24px;
+        padding-top: 13px;
+      }
     }
   }
 
@@ -217,6 +232,9 @@ export default {
     .listTitleLeft{
       float: left;
       @include Width-Height(583px, 58px);
+      @include desktop() {
+        width: 100%;
+      }
 
       .checkboxTitle{
         float: left;
@@ -229,6 +247,11 @@ export default {
         @include Width-Height(533px, 58px);
         color: #616161;
         font-size: 18px;
+        @include desktop() {
+          @include Width-Height(305px, 58px);
+          position: absolute;
+          margin-left: 50px;
+        }
 
         .goods{
           float: left;
@@ -240,6 +263,9 @@ export default {
           float: right;
           margin-right: 115px;
           margin-top: 16px;
+          @include desktop() {
+            display: none;
+          }
         }
       }
     }
@@ -247,6 +273,9 @@ export default {
     .listTitleRight{
       float: right;
       @include Width-Height(539px, 58px);
+      @include desktop() {
+        display: none;
+      }
 
       .otherTitleLeft{
         float: left;
@@ -286,10 +315,16 @@ export default {
     box-shadow: 3px 0px 8px 0px #c4c4c4;
     margin-top: 15px;
     margin-bottom: 15px;
+    @include desktop() {
+      @include Width-Height(100%, 150px);
+    }
 
     .cartListInfo{
       float: left;
       @include Width-Height(395px, 107px);
+      @include desktop() {
+        width: 100%;
+      }
 
       .checkbox{
         float: left;
@@ -300,11 +335,18 @@ export default {
       .productMessage{
         float: right;
         @include Width-Height(335px, 107px);
+        @include desktop() {
+          float: left;
+          width: 305px;
+        }
 
         img{
           float: left;
           @include Width-Height(100px, 75px);
           margin-top: 16px;
+          @include desktop() {
+            @include Width-Height(90px, 65px);
+          }
         }
 
         .productTitle{
@@ -314,6 +356,12 @@ export default {
           margin-right: 15px;
           color: #616161;
           font-size: 16px;
+          @include desktop() {
+            margin-right: 7px;
+            margin-top: 15px;
+            height: 25px;
+            -webkit-line-clamp: 1;
+          }
 
           display: -webkit-box;   /* 將對象作為彈性伸縮盒子模型顯示 */
           -webkit-box-orient: vertical;   /* 設置或檢索伸縮盒子的子元素排列方式 */
@@ -327,10 +375,19 @@ export default {
     .cartListOther{
       float: right;
       @include Width-Height(690px, 107px);
+      @include desktop() {
+        float: left;
+        @include Width-Height(100%, 43px);
+      }
 
       .otherLeft{
         float: left;
         @include Width-Height(400px, 107px);
+        @include desktop() {
+          @include Width-Height(0, 0);
+          float: left;
+          position: absolute;
+        }
 
         .originalPrice{
           float: left;
@@ -338,6 +395,11 @@ export default {
           color: #616161;
           font-size: 16px;
           font-weight: bold;
+          @include desktop() {
+            margin-left: 150px;
+            margin-top: -60px;
+            color: #db4949;
+          }
         }
 
         .cartControl{
@@ -345,12 +407,23 @@ export default {
           @include Width-Height(250px, 107px);
           padding-top: 30px;
           padding-left: 10px;
+          @include desktop() {
+            float: left;
+            @include Width-Height(215px, 88px);
+            margin-left: 140px;
+            margin-top: -45px;
+          }
         }
       }
 
       .otherRight{
         float: right;
         @include Width-Height(290px, 107px);
+        @include desktop() {
+          @include Width-Height(0, 0);
+          float: left;
+          position: absolute;
+        }
 
         .totalPrice{
           float: left;
@@ -359,6 +432,9 @@ export default {
           font-size: 16px;
           font-weight: bold;
           margin-left: 10px;
+          @include desktop() {
+            display: none;
+          }
         }
 
         .deleteBtn{
@@ -369,6 +445,11 @@ export default {
           margin-right: 30px;
           cursor: pointer;
           color: #ef4c2f;
+          @include desktop() {
+            float: left;
+            margin-left: 300px;
+            margin-top: -20px;
+          }
 
           &:hover{
             background: #ef4c2f;
@@ -392,6 +473,9 @@ export default {
     box-shadow: 3px 3px 15px 0px #c4c4c4;
     position: sticky;
     bottom: 0;
+    @include desktop() {
+      @include Width-Height(100%, 180px);
+    }
 
     .CouponUsage{
       height: 80px;
@@ -407,6 +491,10 @@ export default {
         box-shadow: 3px 3px 15px 0px #c4c4c4;
         margin-left: 755px;
         margin-top: 15px;
+        @include desktop() {
+          @include Width-Height(200px, 45px);
+          margin-left: 50px;
+        }
       }
 
       input::placeholder{
@@ -421,6 +509,12 @@ export default {
         margin-right: 30px;
         margin-top: 15px;
         cursor: pointer;
+        @include desktop() {
+          margin-right: 15px;
+          @include Width-Height(65px, 45px);
+          padding-top: 9px;
+          text-align: center;
+        }
 
         &:hover{
           opacity: 0.9;
@@ -430,17 +524,26 @@ export default {
           font-size: 18px;
           color: white;
           margin-left: 17px;
+          @include desktop() {
+            margin-left: 0;
+          }
         }
       }
     }
 
     .checkoutInfo{
       height: 70px;
+      @include desktop() {
+        height: 100px;
+      }
 
       .checkoutLeft{
         float: left;
         @include Width-Height(300px, 70px);
         @include checkbox(25px, 15px);
+        @include desktop() {
+          width: 125px;
+        }
 
         .selectAll{
           float: right;
@@ -449,30 +552,56 @@ export default {
           margin-right: 150px;
           margin-top: 22px;
           color: #616161;
+          @include desktop() {
+            width: 80px;
+            font-size: 14px;
+            margin-right: 0;
+            margin-top: 24px;
+          }
         }
       }
 
       .checkoutRight{
         float: right;
         @include Width-Height(500px, 70px);
+        @include desktop() {
+          float: left;
+          @include Width-Height(0, 0);
+          position: absolute;
+        }
 
         .productstotalPrice{
           float: left;
           margin-left: 10px;
           margin-top: 14px;
+          @include desktop() {
+            margin-left: 140px;
+            margin-top: 10px;
+            width: 215px;
+          }
 
           .numberOfItems{
             font-size: 16px;
+            @include desktop() {
+              font-size: 14px;
+            }
           }
 
           .checkoutTotalPrice{
             font-size: 23px;
             color: #db4949;
+            @include desktop() {
+              font-size: 18px;
+            }
           }
 
           .howMuchDiscount{
             margin-left: 110px;
             margin-top: -7px;
+            @include desktop() {
+              margin-left: 50px;
+              width: 100px;
+            }
 
             span{
               color: red;
@@ -488,6 +617,13 @@ export default {
           margin-right: 30px;
           margin-top: 15px;
           cursor: pointer;
+          @include desktop() {
+            @include Width-Height(90px, 40px);
+            text-align: center;
+            position: absolute;
+            margin-left: 265px;
+            margin-top: 60px;
+          }
 
           &:hover{
             background: #89644f;
@@ -497,6 +633,9 @@ export default {
             color: white;
             font-size: 16px;
             margin-left: 75px;
+            @include desktop() {
+              margin-left: 0;
+            }
           }
         }
       }
@@ -507,9 +646,14 @@ export default {
     text-align: center;
     margin-bottom: 100px;
 
-    .emptyCart-logo{
-      padding-bottom: 25px;
-      padding-top: 25px;
+    .emptyCart-box{
+      @include Width-Height(104px, 122px);
+      margin: 25px auto;
+      overflow: hidden;
+
+      .emptyCart-logo{
+        -webkit-user-drag: none;
+      }
     }
 
     p{
@@ -522,6 +666,10 @@ export default {
       @include Width-Height(120px, 25px);
       background: #ef4c2f;
       margin-left: 502px;
+      @include desktop() {
+        margin-left: 0;
+        margin: auto;
+      }
 
       .goToPageBtn{
         vertical-align: middle;

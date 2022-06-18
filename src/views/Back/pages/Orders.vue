@@ -45,9 +45,9 @@ import pagination from '@/components/Pagination.vue';
 export default {
   data() {
     return {
-      orders: [],   // 用來儲存JSON資料
-      pagination: {},  // 撈頁碼數
-      isLoading: false   // 預設為停止loading狀態
+      orders: [],
+      pagination: {},
+      isLoading: false
     }
   },
   components: {
@@ -55,16 +55,13 @@ export default {
   },
   methods: {
     getOrders(page = 1) {
+      const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/orders?page=${page}`;  // 取得商品列表
-      // 取得JSON數據時即執行loading狀態
-      this.isLoading = true; 
-
+      vm.isLoading = true; 
       this.$http.get(api).then((response) => {
-        // 取得JSON數據之後即停止loading狀態
-        this.isLoading = false; 
-
-        this.orders = response.data.orders;
-        this.pagination = response.data.pagination;
+        vm.isLoading = false;
+        vm.orders = response.data.orders;
+        vm.pagination = response.data.pagination;
       });
     }
   },

@@ -75,7 +75,9 @@
           </div>
 
           <div class="cart-otherContent" v-if="cartProducts.length === 0">
-            <img src="@/assets/img/empty_cart.png" alt="" class="emptyCart-logo">
+            <div class="emptyCart-box">
+              <img src="@/assets/img/empty.png" alt="">
+            </div>
             <p>你的購物車是空的ㄛ</p>
           </div>
         </div>
@@ -133,7 +135,7 @@ export default {
   },
   computed: {
     ...mapState('shoppingCart', {
-      cartProducts: state => state.cartProducts.reverse()
+      cartProducts: state => state.carts.reverse()
     }),
     ...mapState('favorite', {
       favorites: state => state.favorites
@@ -141,7 +143,7 @@ export default {
   },
   created() {
     this.$store.dispatch('shoppingCart/getCartContents');
-  },
+  }
 }
 </script>
 
@@ -214,13 +216,15 @@ export default {
 
     .logo{
       margin-top: 27px;
-      width: 100px;
+      @include Width-Height(100px, 44px);
+      overflow: hidden;
       @include desktop() {
         margin-left: 10px
       }
 
       .navbar-logo{
-        @include Width-Height(100px, 45px);
+        width: 100px;
+        -webkit-user-drag: none;
       }
     }
 
@@ -254,7 +258,7 @@ export default {
     }
   }
 
-  //router構造配置，用來添加樣式類名
+  // router構造配置，用來添加樣式類名
   .active .line{
     @include Width-Height(50px, 3px);
     display: inline-block;
@@ -357,9 +361,14 @@ export default {
           text-align: center;
           margin-bottom: 100px;
 
-          .emptyCart-logo{
-            padding-bottom: 25px;
-            padding-top: 25px;
+          .emptyCart-box{
+            @include Width-Height(104px, 122px);
+            margin: 25px auto;
+            overflow: hidden;
+
+            img{
+              -webkit-user-drag: none;
+            }
           }
 
           p{

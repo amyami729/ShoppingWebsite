@@ -19,8 +19,6 @@
       </thead>
 
       <tbody>
-        <!-- v-for:將products(key)該陣列中的資料進行遍歷並取出來，賦值給item --> 
-        <!-- 透過v-bind綁定key屬性並獲取item該物件的id -->
         <tr class="align-middle" v-for="item in products" :key="item.id">
           <td class="d-md-table-cell d-none">{{ item.category }}</td>
           <td>
@@ -66,28 +64,23 @@ export default {
   },
   data() {
     return {
-      products: [],  // 用來儲存JSON資料
-      pagination: {},  // 撈頁碼數
+      products: [],
+      pagination: {},
       currentProduct: {},  // 用來存放新建立好的商品資料＆編輯過後的資料
       isNew: false,     // 用來判斷此時的行為是true(建立產品)還是false(編輯產品)
       modalTitle: '',
       productModal: '',
       deleteModal: '',
-      isLoading: false   // 預設為停止loading狀態
+      isLoading: false
     }
   },
   methods: {
-    // 取得JSON數據
-    getProducts(page = 1) {   // 設置預設值為1
+    getProducts(page = 1) {
       const vm = this;
-      // 取得JSON數據時即執行loading狀態
-      this.isLoading = true; 
-
+      vm.isLoading = true;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products?page=${page}`;  // 取得商品列表
-      this.$http.get(api).then((response) => { 
-      // 取得JSON數據之後即停止loading狀態
-      this.isLoading = false; 
-        // 成功拿到資料，然後...
+      this.$http.get(api).then((response) => {
+        vm.isLoading = false;
         vm.products = response.data.products; 
         vm.pagination = response.data.pagination;
       });
@@ -126,14 +119,13 @@ export default {
     deleteProduct(id) {
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/product/${id}`;  // 刪除產品
       this.$http.delete(api).then((response) => {
-        if (response.data.success) {     // 若商品刪除成功,
-          this.showDeleteModal(false);   // 關閉modal
-          this.getProducts();            // 重新取得產品資料
+        if (response.data.success) {
+          this.showDeleteModal(false);
+          this.getProducts();
         }
       });
     }
   },
-  // 調用取得JSON數據
   created() {     
     this.getProducts();
   },

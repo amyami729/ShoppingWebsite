@@ -58,14 +58,14 @@ import pagination from '@/components/Pagination.vue';
 export default {
   data() {
     return {
-      coupons: [],  // 用來儲存JSON資料
-      pagination: {},  // 撈頁碼數
+      coupons: [],
+      pagination: {},
       currentCoupon: {},  // 用來存放新建立好的商品資料＆編輯過後的資料
       isNew: false,     // 用來判斷此時的行為是true(建立優惠券)還是false(編輯優惠券)
       modalTitle: '',
       couponModal: '',
       deleteModal: '',
-      isLoading: false   // 預設為停止loading狀態
+      isLoading: false
     }
   },
   components: {
@@ -75,16 +75,13 @@ export default {
   },
   methods: {
     getCoupons(page = 1) {
+      const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/coupons?page=${page}`;  // 取得優惠券列表
-      // 取得JSON數據時即執行loading狀態
-      this.isLoading = true;
-
+      vm.isLoading = true;
       this.$http.get(api).then((response) => {
-        // 取得JSON數據之後即停止loading狀態
-        this.isLoading = false; 
-
-        this.coupons = response.data.coupons;
-        this.pagination = response.data.pagination;
+        vm.isLoading = false; 
+        vm.coupons = response.data.coupons;
+        vm.pagination = response.data.pagination;
       });
     },
     showCouponModal(isShow) {
@@ -121,9 +118,9 @@ export default {
     deleteCoupon(id) {
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/coupon/${id}`;  // 刪除優惠券
       this.$http.delete(api).then((response) => {
-        if (response.data.success) {     // 若優惠券刪除成功,
-          this.showDeleteModal(false);   // 關閉modal
-          this.getCoupons();            // 重新取得產品資料
+        if (response.data.success) {
+          this.showDeleteModal(false);
+          this.getCoupons();
         }
       });
     }

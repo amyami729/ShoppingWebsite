@@ -37,12 +37,12 @@
           <cartControl class="cartControl" @qtyValue="updateProductNum"></cartControl>
         </div>
         <div class="productInfoBtn">
-          <div class="addCartBtn" @click="addToCart(productId, currentProductNum)">
+            <div class="addCartBtn" @click="addToCart(currentProduct, Number(currentProductNum))">
             <i class="fas fa-cart-plus"></i>
             <span>加入購物車</span>
           </div>
           <router-link to="/cart">
-            <div class="buy" @click="addToCart(productId, currentProductNum)">
+              <div class="buy" @click="addToCart(currentProduct, Number(currentProductNum))">
               <span>直接購買</span>
             </div>
           </router-link>
@@ -79,8 +79,8 @@ export default {
         }
       });
     },
-    addToCart(id, qty) {
-      this.$store.dispatch('shoppingCart/addItemToCart', { id, qty });
+    addToCart(item, qty) {
+      this.$store.dispatch('shoppingCart/addToCart', { item, qty });
     },
     // 同步更新子組件的數量並且加入購物車
     updateProductNum(inputValue) {
@@ -98,15 +98,27 @@ export default {
 @mixin Width-Height($Wsize, $Hsize) {
   width: $Wsize;
   height: $Hsize;
-}
+};
+@mixin desktop {
+  @media screen and (max-width: 767px){
+    @content
+  }
+};
 
 .productInfo{
   width: 1124px;
   margin: 0 auto;
+  @include desktop() {
+    width: 100%;
+    padding: 0 10px;
+  }
 
   .listOptions{
     height: 48px;
     padding-top: 10px;
+    @include desktop() {
+      padding-top: 0;
+    }
 
     .listContent{
       text-decoration: none;
@@ -127,19 +139,34 @@ export default {
   .productDetails{
     height: 718px;
     margin-bottom: 55px;
+    @include desktop() {
+      height: 850px;
+      margin-bottom: 20px;
+    }
 
     .productPicture{
       float: left;
       margin-right: 32px;
+      @include desktop() {
+        margin-right: 0;
+        width: 100%;
+      }
 
       img{
         @include Width-Height(540px, 600px);
+        @include desktop() {
+          @include Width-Height(100%, 270px);
+        }
       }
     }
 
     .productDescription{
       float: right;
       @include Width-Height(552px, 718px);
+      @include desktop() {
+        float: left;
+        @include Width-Height(100%, 555px);
+      }
 
       .productCategory{
         @include Width-Height(98px, 32px);
@@ -149,6 +176,11 @@ export default {
         margin-bottom: 0;
         color: white;
         background: #909090;
+        @include desktop() {
+          @include Width-Height(90px, 30px);
+          margin-top: 25px;
+          font-size: 17px;
+        }
       }
 
       .productTitle{
@@ -158,12 +190,20 @@ export default {
         margin: 30px 0 48px 0;
         font-weight: normal;
         letter-spacing: 1px;
+        @include desktop() {
+          width: 100%;
+          margin: 25px 0;
+          font-size: 20px;
+        }
       }
 
       .producPrice{
         @include Width-Height(552px, 60px);
         border: 1px solid #c4c4c4;
         padding-top: 6px;
+        @include desktop() {
+          @include Width-Height(100%, 45px);
+        }
 
         .sellingPrice{
           font-size: 30px;
@@ -172,24 +212,38 @@ export default {
           font-weight: bold;
           margin-left: 26px;
           margin-right: 26px;
+          @include desktop() {
+            font-size: 20px;
+            margin-right: 20px;
+          }
         }
 
         .originalPrice{
           font-size: 20px;
           color: #909090;
           vertical-align: middle;
+          @include desktop() {
+            font-size: 16px;
+          }
         }
       }
 
       .productSize{
         height: 84px;
         margin-top: 33px;
+        @include desktop() {
+          margin-top: 20px;
+          height: 73px;
+        }
 
         .sizeTitle{
           font-size: 20px;
           font-weight: bold;
           color: #616161;
           margin-bottom: 8px;
+          @include desktop() {
+            font-size: 16px;
+          }
         }
 
         .sizeContent{
@@ -197,46 +251,74 @@ export default {
           font-size: 16px;
           color: #616161;
           width: 230px;
+          @include desktop() {
+            font-size: 14px;
+          }
         }
       }
 
       .productIntroduction{
         height: 110px;
         margin-top: 22px;
+        @include desktop() {
+          margin-top: 20px;
+        }
 
         .introductionTitle{
           font-size: 20px;
           font-weight: bold;
           color: #616161;
           margin-bottom: 8px;
+          @include desktop() {
+            font-size: 16px;
+            margin-bottom: 3px;
+          }
         }
 
         .introductionContent{
           font-size: 16px;
           color: #616161;
+          @include desktop() {
+            font-size: 14px;
+          }
         }
       }
 
       .productQuantity{
         height: 45px;
         margin-top: 60px;
+        @include desktop() {
+          margin-top: 20px;
+          height: 38px;
+        }
 
         span{
           float: left;
           font-size: 19px;
           margin-top: 8px;
           color: #616161;
+          @include desktop() {
+            font-size: 16px;
+            margin-top: 7px;
+          }
         }
 
         .cartControl{
           float: right;
           margin-right: 345px;
+          @include desktop() {
+            float: right;
+            margin-right: 160px;
+          }
         }
       }
 
       .productInfoBtn{
         height: 60px;
         margin-top: 60px;
+        @include desktop() {
+          margin-top: 40px;
+        }
 
         .addCartBtn{
           float: left;
@@ -245,6 +327,9 @@ export default {
           background: #fff;
           color: #909090;
           cursor: pointer;
+          @include desktop() {
+            @include Width-Height(160px, 60px);
+          }
 
           &:hover{
             background: #909090;
@@ -256,6 +341,9 @@ export default {
             font-size: 18px;
             margin-left: 68px;
             margin-top: 20px;
+            @include desktop() {
+              margin-left: 20px;
+            }
           }
 
           span{
@@ -264,6 +352,9 @@ export default {
             font-size: 18px;
             margin-top: 16px;
             margin-right: 70px;
+            @include desktop() {
+              margin-right: 20px;
+            }
           }
         }
 
@@ -272,6 +363,9 @@ export default {
           @include Width-Height(260px, 60px);
           background: #c2987b;
           cursor: pointer;
+          @include desktop() {
+            @include Width-Height(160px, 60px);
+          }
 
           &:hover{
             opacity: 0.9;

@@ -14,7 +14,7 @@
 export default {
   props: {
     inputQty: Number,
-    productId : String
+    product : Object
   },
   data() {
     return {
@@ -46,7 +46,7 @@ export default {
     },
     // 將商品id跟數量傳回ShoppingCart組件
     UpdateAddToCartValue() {
-      this.$emit('emitUpdateItemQty', [this.productId, this.currentQty]);
+      this.$emit('emitUpdateItemQty', [this.product, Number(this.currentQty)]);
     }
   },
   created() {
@@ -56,14 +56,32 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@mixin Width-Height($Wsize, $Hsize) {
+  width: $Wsize;
+  height: $Hsize;
+};
+@mixin selection($value) {
+  -webkit-user-select: $value;
+  -moz-user-select: $value;
+  -ms-user-select: $value;
+  user-select: $value;
+};
+@mixin desktop {
+  @media screen and (max-width: 767px){
+    @content
+  }
+};
+
 .number-decrement{
   float: left;
-  width: 30px;
-  height: 35px;
+  @include Width-Height(30px, 35px);
   border: 1px solid #e8e8e8;
   border-right: none;
   margin-top: 5px;
   cursor: pointer;
+  @include desktop() {
+    margin-top: 2px;
+  }
 
   .decrease{
     display: inline-block;
@@ -71,24 +89,22 @@ export default {
     margin-left: 8px;
     margin-top: -5px;
     font-weight: lighter;
-
-    -webkit-user-select: none;  
-    -moz-user-select: none;    
-    -ms-user-select: none;
-    user-select: none;
+    @include selection(none);
   }
 }
 
 .input-number{
   float: left;
-  width: 70px;
-  height: 35px;
+  @include Width-Height(70px, 35px);
   text-align: center;
   font-size: 18px;
   border: 1px solid #e8e8e8;
   margin-top: 5px;
   color: #616161;
   outline: none;
+  @include desktop() {
+    margin-top: 2px;
+  }
 
   &:focus{
     box-shadow: 3px 3px 15px 0px #c4c4c4;
@@ -97,23 +113,21 @@ export default {
 
 .number-increment{
   float: left;
-  width: 30px;
-  height: 35px;
+  @include Width-Height(30px, 35px);
   border: 1px solid #e8e8e8;
   border-left: none;
   margin-top: 5px;
   cursor: pointer;
+  @include desktop() {
+    margin-top: 2px;
+  }
 
   .add{
     display: inline-block;
     font-size: 22px;
     margin-left: 8px;
     font-weight: lighter;
-
-    -webkit-user-select: none;  
-    -moz-user-select: none;    
-    -ms-user-select: none;
-    user-select: none;
+    @include selection(none);
   }
 }
 </style>

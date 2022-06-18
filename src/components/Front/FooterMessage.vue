@@ -1,9 +1,7 @@
 <template>
   <div class="footerMessage">
     <div class="simpleMessage">
-      <div class="logo">
-        <img src="@/assets/img/white-logo.png" alt="">
-      </div>
+      <div class="logo"></div>
       <p>如果您有任何想法或想提升您的創意項目，請隨時與我聯繫!</p>
     </div>
 
@@ -50,7 +48,7 @@
     </div>
   </div>
   <div class="copyright">
-    <p>僅用於個人學習使用，非商業用途。 2021 © Amy Chen All Rights Reserved.</p>
+    <p><i>僅用於個人學習使用&nbsp;</i> 2022 © Amy Chen All Rights Reserved.</p>
   </div>
 </template>
 
@@ -63,6 +61,14 @@ export default {
 @mixin Width-Height($Wsize, $Hsize) {
   width: $Wsize;
   height: $Hsize;
+};
+@mixin iconStyle {
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+  margin-top: 1px;
+  font-size: 18px;
+  color: #616161;
 };
 @mixin desktop {
   @media screen and (max-width: 767px){
@@ -83,17 +89,17 @@ export default {
     @include Width-Height(320px, 285px);
     @include desktop() {
       @include Width-Height(100%, 130px);
+      padding: 0 10px;
     }
 
     .logo{
-      height: 110px;
-      padding-top: 65px;
-      padding-left: 32px;
+      @include Width-Height(100px, 44px);
+      background: url(../../assets/img/logo.png) no-repeat 0 bottom;
+      background-size: 100%;
+      margin-top: 65px;
+      margin-left: 32px;
       @include desktop() {
-        padding-top: 20px;
-        padding-left: 0;
-        height: 82px;
-        text-align: center;
+        margin: 20px auto 15px;
       }
     }
 
@@ -116,6 +122,7 @@ export default {
     @include Width-Height(804px, 285px);
     @include desktop() {
       height: 156px;
+      padding-left: 10px;
     }
 
     .contact{
@@ -170,9 +177,7 @@ export default {
           }
 
           i{
-            padding: 4px 4px;
-            font-size: 18px;
-            color: #616161;
+            @include iconStyle;
 
             &:hover{
               color: #ffffff;
@@ -213,9 +218,7 @@ export default {
           }
 
           i{
-            padding: 4px 4px;
-            font-size: 18px;
-            color: #616161;
+            @include iconStyle;
 
             &:hover{
               color: #ffffff;
@@ -276,9 +279,7 @@ export default {
           border-radius: 20%;
 
           i{
-            padding: 3px 5px;
-            font-size: 18px;
-            color: #616161;
+            @include iconStyle;
 
             &:hover{
               color: #cc3384;
@@ -295,9 +296,7 @@ export default {
           border-radius: 5px;
 
           i{
-            padding: 4px 3px;
-            font-size: 18px;
-            color: #616161;
+            @include iconStyle;
 
             &:hover{
               color: #f80000;
@@ -325,9 +324,7 @@ export default {
           }
 
           i{
-            padding: 3px 8px;
-            font-size: 18px;
-            color: #616161;
+            @include iconStyle;
 
             &:hover{
               color: white;
@@ -349,9 +346,7 @@ export default {
         }
 
         i{
-          padding: 3px 5px;
-          font-size: 18px;
-          color: #616161;
+          @include iconStyle;
 
           &:hover{
             color: white;
@@ -363,22 +358,23 @@ export default {
 }
 
 .copyright{
-  @include Width-Height(1124px, 55px);
+  @include Width-Height(1124px, 0);
   margin: 0 auto;
   @include desktop() {
     width: 100%;
   }
 
   p{
-    width: 610px;
-    padding-top: 10px;
-    margin-left: 270px;
+    padding: 10px 0;
+    text-align: center;
     font-size: 18px;
     color: #616161;
-    @include desktop() {
-      @include Width-Height(100%, 80px);
-      margin-left: 0;
-      text-align: center;
+
+    i{
+      font-style: normal;
+      @include desktop() {
+        display: block;
+      }
     }
   }
 }

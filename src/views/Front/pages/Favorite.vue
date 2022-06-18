@@ -49,7 +49,7 @@
                 <i class="fas fa-cart-plus"></i>
                 <span>加入購物車</span>
               </div>
-              <i class="fa-solid fa-trash-can remove" @click="removeFavoriteItem(item)"></i>
+              <i class="fa-solid fa-trash-can remove" @click="removeFavorite(item)"></i>
             </div>
           </div>
         </div>
@@ -57,7 +57,7 @@
     </div>
 
     <div class="favorite-otherContent" v-else>
-      <img src="@/assets/img/empty_favorite.png" alt="" class="emptyFavorite-logo">
+      <div class="emptyFavorite-logo"></div>
       <p>你的收藏清單是空的ㄛ</p>
        <div class="jumpPage">
         <router-link to="/products?categoryId=全部商品" class="goToPageBtn">去購物吧!</router-link>
@@ -72,12 +72,11 @@ import { mapState } from 'vuex';
 export default {
   methods: {
     addToCart(item, qty = 1) {
-      const id = item.id;
-      this.$store.dispatch('shoppingCart/addItemToCart', { id, qty });
-      this.removeFavoriteItem(item);
+      this.$store.dispatch('shoppingCart/addToCart', { item, qty });
+      this.removeFavorite(item);
     },
-    removeFavoriteItem(item) {
-      this.$store.dispatch('favorite/removeFavoriteItem', item);
+    removeFavorite(item) {
+      this.$store.dispatch('favorite/removeFavorite', item);
     }
   },
   computed: {
@@ -92,18 +91,39 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@mixin Width-Height($Wsize, $Hsize) {
+  width: $Wsize;
+  height: $Hsize;
+};
+@mixin desktop {
+  @media screen and (max-width: 767px){
+    @content
+  }
+};
+
 .favorite{
   width: 1124px;
   margin: 0 auto;
+  @include desktop() {
+    width: 100%;
+    padding: 0 10px;
+  }
 
   .favoriteTop{
     height: 90px;
+    @include desktop() {
+      height: 60px;
+    }
 
     .title{
       font-size: 30px;
       color: #616161;
       text-align: center;
       padding-top: 16px;
+      @include desktop() {
+        font-size: 24px;
+        padding-top: 13px;
+      }
 
       i{
         color: #c13e1b;
@@ -112,23 +132,32 @@ export default {
   }
 
   .septalLine{
-    width: 95%;
+    @include Width-Height(95%, 1px);
     margin-left: 27px;
-    height: 1px;
     background: #808080;
+    @include desktop() {
+      width: 90%;
+      margin-left: 17px;
+    }
   }
 
   .favoriteNav{
     height: 85px;
     background: #616161;
     padding-top: 30px;
+    @include desktop() {
+      height: 70px;
+      padding-top: 20px;
+    }
 
     .navTitleLeft{
       float: left;
-      width: 540px;
-      height: 54px;
+      @include Width-Height(540px, 54px);
       font-size: 18px;
       color: #a6b1cf;
+      @include desktop() {
+        width: 100%;
+      }
 
       .goods{
         float: left;
@@ -140,20 +169,24 @@ export default {
         float: right;
         margin-right: 90px;
         margin-top: 14px;
+        @include desktop() {
+          display: none;
+        }
       }
     }
 
     .navTitleRight{
       float: right;
-      width: 584px;
-      height: 54px;
+      @include Width-Height(584px, 54px);
       font-size: 18px;
       color: #a6b1cf;
+      @include desktop() {
+        display: none;
+      }
 
       .titleContentLeft{
         float: left;
-        width: 190px;
-        height: 54px;
+        @include Width-Height(190px, 54px);
 
         .stockStatus{
           margin-left: 35px;
@@ -163,8 +196,7 @@ export default {
 
       .titleContentRight{
         float: right;
-        width: 394px;
-        height: 54px;
+        @include Width-Height(394px, 54px);
 
         .cart{
           float: left;
@@ -183,38 +215,51 @@ export default {
 
   .favoriteListBox{
     margin-bottom: 100px;
+    @include desktop() {
+      margin-bottom: 60px;
+    }
 
     .favoriteList{
       height: 160px;
       background: #616161;
     
-
       .listInfo{
         float: left;
-        width: 540px;
-        height: 159px;
+        @include Width-Height(540px, 159px);
+        @include desktop() {
+          width: 100%;
+        }
 
         .infoLeft{
           float: left;
-          width: 413px;
-          height: 159px;
+          @include Width-Height(413px, 159px);
+          @include desktop() {
+            width: 100%;
+          }
 
           img{
             float: left;
-            width: 100px;
-            height: 75px;
+            @include Width-Height(100px, 75px);
             margin-left: 40px;
             margin-top: 40px;
+            @include desktop() {
+              margin-left: 20px;
+              margin-top: 30px;
+            }
           }
 
           .productTitle{
             float: right;
-            width: 200px;
-            height: 45px;
+            @include Width-Height(200px, 45px);
             font-size: 16px;
             color: #ffffff;
             margin-top: 50px;
             margin-right: 45px;
+            @include desktop() {
+              position: absolute;
+              margin-left: 135px;
+              margin-top: 30px;
+            }
 
             display: -webkit-box;   /* 將對象作為彈性伸縮盒子模型顯示 */
             -webkit-box-orient: vertical;   /* 設置或檢索伸縮盒子的子元素排列方式 */
@@ -226,31 +271,43 @@ export default {
 
         .infoRight{
           float: right;
-          width: 127px;
-          height: 159px;
+          @include Width-Height(127px, 159px);
+          @include desktop() {
+            @include Width-Height(100px, 25px);
+            position: absolute;
+            margin-top: 85px;
+            margin-left: 135px;
+          }
 
           .price{
             font-size: 16px;
             color: #afafaf;
             display: block;
             margin-top: 50px;
+            @include desktop() {
+              margin-top: 0;
+            }
           }
         }
       }
 
       .listOther{
         float: right;
-        width: 584px;
-        height: 159px;
+        @include Width-Height(584px, 159px);
+        @include desktop() {
+          float: left;
+          @include Width-Height(0, 0);
+        }
 
         .otherLeft{
           float: left;
-          width: 175px;
-          height: 159px;
+          @include Width-Height(175px, 159px);
+          @include desktop() {
+            display: none;
+          }
 
           .stockBox{
-            width: 85px;
-            height: 21px;
+            @include Width-Height(85px, 21px);
             background: #34c38f;
             margin-top: 50px;
             margin-left: 32px;
@@ -265,19 +322,25 @@ export default {
 
         .otherRight{
           float: right;
-          width: 409px;
-          height: 159px;
+          @include Width-Height(409px, 159px);
+          @include desktop() {
+            height: 0;
+          }
 
           .addCartBtn{
             float: left;
-            width: 150px;
-            height: 40px;
+            @include Width-Height(150px, 40px);
             border-radius: 5px;
             background: #c2987b;
             color: #ffffff;
             margin-top: 42px;
             margin-left: 40px;
             cursor: pointer;
+            @include desktop() {
+              @include Width-Height(130px, 35px);
+              margin-left: 260px;
+              margin-top: 113px;
+            }
 
             &:hover{
               opacity: 0.9;
@@ -288,6 +351,9 @@ export default {
               font-size: 16px;
               margin-left: 20px;
               margin-top: 12px;
+              @include desktop() {
+                margin-left: 13px;
+              }
             }
 
             span{
@@ -296,6 +362,9 @@ export default {
               font-size: 16px;
               margin-top: 8px;
               margin-right: 25px;
+              @include desktop() {
+                margin-right: 13px;
+              }
             }
           }
 
@@ -305,6 +374,11 @@ export default {
             margin-top: 50px;
             font-size: 18px;
             color: #afafaf;
+            @include desktop() {
+              float: left;
+              margin-right: 0;
+              margin-top: 0;
+            }
 
             &:hover{
               color: #ef4c2f;
@@ -321,6 +395,9 @@ export default {
 
     .emptyFavorite-logo{
       padding-bottom: 20px;
+      @include Width-Height(104px, 122px);
+      background: url(../../../assets/img/empty.png) no-repeat right 0;
+      margin: 0 auto;
     }
 
     p{
@@ -330,10 +407,13 @@ export default {
     }
 
     .jumpPage{
-      width: 120px;
-      height: 25px;
+      @include Width-Height(120px, 25px);
       background: #ef4c2f;
       margin-left: 502px;
+      @include desktop() {
+        margin-left: 0;
+        margin: auto;
+      }
 
       .goToPageBtn{
         vertical-align: middle;

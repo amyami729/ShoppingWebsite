@@ -4,7 +4,6 @@
     <carousel class="carousel" v-slot="{ currentSlide }">
       <slide v-for="(slide, index) in carouselSlides" :key="index">
         <div class="slide-info" v-show="currentSlide === index + 1">
-          <!-- 透過require引入另一個模組（module.exports） -->
           <img :src="require(`@/assets/img/${slide}.png`)" alt="">
         </div>
       </slide>
@@ -105,20 +104,17 @@ export default {
   },
   data() {
     return {
-      products: [],  // 用來儲存JSON資料
+      products: [],
       recommendProducts: [],  // 用來儲存篩選後的商品資料
-      isLoading: false   // 預設為停止loading狀態
+      isLoading: false
     }
   },
   methods: {
     getProducts() {
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products/all`;  // 取得全部商品列表
-      // 取得JSON數據時即執行loading狀態
       vm.isLoading = true; 
-
       this.$http.get(api).then((response) => {
-        // 取得JSON數據之後即停止loading狀態
         vm.isLoading = false; 
         vm.products = response.data.products;
         vm.productsFilter();
@@ -127,12 +123,7 @@ export default {
     // 商品篩選器
     productsFilter() {
       const vm = this;
-      let result = vm.products.filter((object) => {
-        if (object.category === '特色推薦') {
-          return object;
-        }
-        return false;
-      });
+      let result = vm.products.filter(object => object.category === '特色推薦');
       result = result.reverse().slice(0, 4);
       vm.recommendProducts = result;
     },
@@ -142,7 +133,7 @@ export default {
   },
   created() {
     this.getProducts();
-  },
+  }
 }
 </script>
 
@@ -182,7 +173,7 @@ export default {
     margin: 60px 0 46px;
     position: relative;
     @include desktop() {
-      margin: 25px 0 18px
+      margin: 25px 0 18px;
     }
 
     img{
@@ -255,6 +246,7 @@ export default {
         }
       }
     }
+
     .card-wrapper{
       margin-right: 28px;
       display: inline-block;
@@ -272,7 +264,10 @@ export default {
   .featured-banner-top{
     margin: 60px 0;
     height: 427px;
-    background: url(../../../assets/img/featured-banner-01.png) no-repeat center;
+    background: url(../../../assets/img/featured-banner.png) no-repeat 0 60%;
+    @include desktop() {
+      background-position:  15% 60%;
+    }
     
     .banner-content-left{
       width: 375px;
@@ -319,7 +314,10 @@ export default {
   .featured-banner-bottom{
     margin: 0 0 60px;
     height: 427px;
-    background: url(../../../assets/img/featured-banner-02.png) no-repeat center;
+    background: url(../../../assets/img/featured-banner.png) no-repeat right 60%;
+    @include desktop() {
+      background-position:  70% 60%;
+    }
 
     .banner-content-right{
       width: 375px;
