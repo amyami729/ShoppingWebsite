@@ -6,7 +6,7 @@
           <h5 class="modal-title" id="productModalLabel">
             <slot name="title"></slot>
           </h5>
-          <button type="button" class="btn-close" @click="hideModel()" aria-label="Close"></button>
+          <button type="button" class="btn-close" @click="hideModel" aria-label="Close"></button>
         </div>
 
         <div class="modal-body">
@@ -19,9 +19,8 @@
               <div class="form-group">
                 <label for="customFile">
                   或 上傳圖片
-                  <!-- 讀取效果的icon -->
                   <i class="fas fa-spinner fa-pulse" v-if="status.fileUploading"></i>
-                  </label>
+                </label>
                 <input type="file" id="customFile" class="form-control" ref="files" @change="uploadFile">
               </div>
               <img class="img-thumbnail" alt="商品圖片" :src="currentProduct.imageUrl">
@@ -77,7 +76,7 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" @click="hideModel()">取消</button>
+          <button type="button" class="btn btn-outline-secondary" @click="hideModel">取消</button>
           <button type="button" class="btn btn-success" @click="updateProduct">確認</button>
         </div>
       </div>
@@ -95,7 +94,7 @@ export default {
     return {
       currentProduct: {},  // 1.將當前產品之內容綁定在此
       status: {
-        fileUploading: false   // 用來設定局部的loading狀態，預設為不顯示
+        fileUploading: false
       }
     }
   },
@@ -107,11 +106,10 @@ export default {
     getProducts() {
       this.$emit('emit-getProducts');
     },
-    // 2.透過post方式將currentProduct新增到資料庫裡
+    // 2.將 currentProduct 寫入資料庫
     updateProduct() {
       let api;
       let httpMethod;
-
       if (this.isNew) { 
         api  = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/product`;  // 建立產品
         httpMethod = 'post';
@@ -121,13 +119,13 @@ export default {
       }
       
       // JavaScript向伺服器發送HTTP請求並通過自定義的httpMethod方法，將api和currentProduct資料一併傳送到後端
-      // 當後端傳回的response是完成的狀態下(表示請求已完成)，我們可以用.then去處理成功結果
+      // 當後端傳回的response是完成的狀態下(表示請求已完成)，用 then 處理成功結果
       this.$http[httpMethod](api, {data: this.currentProduct}).then((response) => { 
-        if (response.data.success) {  // 若商品 建立/編輯 成功,
-          this.hideModel();    // 關閉modal
+        if (response.data.success) {
+          this.hideModel();
           this.$store.dispatch('alertModules/updateMessage',
             { message: response.data.message, status: 'success' });
-          this.getProducts();   // 重新取得產品資料
+          this.getProducts();
         }
       });
     },
@@ -135,23 +133,18 @@ export default {
       // 取出圖檔
       const uploadedFile = this.$refs.files.files[0];  
       // 建立formData物件 
-      const formData = new FormData(); 
+      const formData = new FormData();
       // 使用append()方式將uploadedFile圖片檔上傳到file-to-upload欄位，並新增到formData（將uploadedFile物件改成FormData的格式）
       formData.append('file-to-upload', uploadedFile); 
-      // 定義路徑
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/upload`;  // 表單傳送
-      // 取得JSON數據時即執行loading狀態
       this.status.fileUploading = true; 
-      // 送出
       this.$http.post(api, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'  //設置請求的內容型態：form-data格式
         }
       }).then((response) => {
-        // 取得JSON數據之後即停止loading狀態
         this.status.fileUploading = false; 
-
-        if (response.data.success) {   // 若圖片上傳成功,
+        if (response.data.success) {
           this.currentProduct.imageUrl = response.data.imageUrl;
         }else {
           this.$store.dispatch('alertModules/updateMessage',

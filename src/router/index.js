@@ -9,14 +9,13 @@ const routes = [
   {
     path: '/',
     redirect: '/home',
-    component: () => import('@/views/Front/Catalog.vue'),
+    component: () => import(/* webpackChunkName: "Catalog" */ '@/views/Front/Catalog.vue'),
     children: [
       {
         path: 'home',
         component: () => import('@/views/Front/pages/Home.vue')
       },
       {
-        // query: 路由直接設定為 /products 即可
         path: 'products',
         component: () => import('@/views/Front/pages/Products.vue')
       },
@@ -42,12 +41,12 @@ const routes = [
   {
     path: '/admin',
     redirect: '/admin/products',
-    component: () => import('@/views/Back/Dashboard.vue'),
+    component: () => import(/* webpackChunkName: "Dashboard" */ '@/views/Back/Dashboard.vue'),
     children: [
       {
         path: 'products',
         component: () => import('@/views/Back/pages/BackProducts.vue'),
-        meta: { requiresAuth: true }   // 新增驗證方法
+        meta: { requiresAuth: true }
       },
       {
         path: 'orders',

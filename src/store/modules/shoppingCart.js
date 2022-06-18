@@ -1,38 +1,51 @@
-import axios from 'axios';
-
 export default ({
   namespaced: true,
-  state: {  // 定義狀態
-    cartProducts: []
+  state: {
+    carts: []
   },
-  mutations: {  // 定義方法
-    CART(state, payload) {
-      state.cartProducts = payload;
+  mutations: {
+    CARTS(state, payload) {
+      state.carts = payload;
     }
   },
   actions: {
     getCartContents(context) {
-      const api = `${process.env.VUE_APP_CARTAPI}/api/cart`;  // 取得購物車列表
-      axios.get(api).then((response) => {
-        context.commit('CART', response.data.products);
-      });
+      const cartData = JSON.parse(localStorage.getItem('cartData')) || [];
+      context.commit('CARTS', cartData);
     },
-    // 更新商品數量同時更新DB
-    updateItemQty(context, { id, qty }) {
-      const api = `${process.env.VUE_APP_CARTAPI}/api/cart`;  // 加入購物車
-      const ItemInfoAddToCart = { productId: id, quantity: qty };
-      axios.post(api, ItemInfoAddToCart).then(() => {
-        context.dispatch('getCartContents');
-      });
+    addToCart(context, { item, qty }) {
+      const cartData = JSON.parse(localStorage.getItem('cartData')) || [];
+      if (cartData.find(product => product.id === item.id)) {
+        let product = cartData[cartData.findIndex(product => product.id === item.id)];
+        product.qty += qty;
+        product.total = product.price * product.qty;
+      }else {
+        item.qty = qty;
+        item.total = item.price*item.qty;
+        cartData.push(item);
+      }
+      
+      localStorage.setItem('cartData', JSON.stringify(cartData));
+      context.dispatch('alertModules/updateMessage',
+        { message: '商品已加入購物車', status: 'success' }, { root: true });
+      context.dispatch('getCartContents');
     },
-    addItemToCart(context, { id, qty }) {
-      const api = `${process.env.VUE_APP_CARTAPI}/api/add/qty`;  // 加入購物車（累加）
-      const productInfoAddedToCart = { productId: id, quantity: qty };
-      axios.post(api, productInfoAddedToCart).then(() => {
-        context.dispatch('alertModules/updateMessage',
-          { message: '商品已加入購物車', status: 'success' }, { root: true });
-        context.dispatch('getCartContents');
-      });
+    updateToCart(context, { item, qty }) {
+      const cartData = JSON.parse(localStorage.getItem('cartData')) || [];
+      let product = cartData[cartData.findIndex(product => product.id === item.id)];
+      product.qty = qty;
+      product.total = product.price * product.qty;
+      localStorage.setItem('cartData', JSON.stringify(cartData));
+      context.dispatch('getCartContents');
+    },
+    removeCart(context, item) {
+      const cartData = JSON.parse(localStorage.getItem('cartData')) || [];
+      const index = cartData.findIndex(product => product.id === item.id);
+      cartData.splice(index, 1);
+      localStorage.setItem('cartData', JSON.stringify(cartData));
+      context.dispatch('alertModules/updateMessage',
+        { message: '商品已從購物車移除', status: 'danger' }, { root: true });
+      context.dispatch('getCartContents');
     }
   }
 });

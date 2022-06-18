@@ -23,6 +23,11 @@
           <option value="1">價格: 高到低</option>
           <option value="2">價格: 低到高</option>
         </select>
+        <select class="category-select" @change="updateCategoryId(currentCategory)" v-model="currentCategory">
+          <option :value="categoryItem" v-for="categoryItem in allCategory" :key="categoryItem.id">
+            {{ categoryItem }}
+          </option>
+        </select>
 
         <div class="search-popover" v-if="isShowSearchBar"  @click="getProductsBySearch">
           <div class="search-bar">
@@ -74,7 +79,7 @@ export default {
       categoryId: '',
       pagination: {},   // 撈頁碼數
       currentPage: '',   //用來存放目前是第幾頁
-      isLoading: false,   // 預設為停止loading狀態
+      isLoading: false,
       search: '',
       isShowSearchBar: false
     }
@@ -83,13 +88,9 @@ export default {
     initAllProducts() {
       const vm = this;
       const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/products/all`;  // 取得全部商品列表
-      // 取得JSON數據時即執行loading狀態
-      this.isLoading = true;
-
+      vm.isLoading = true;
       this.$http.get(api).then((response) => {
-        // 取得JSON數據之後即停止loading狀態
-        this.isLoading = false;
-
+        vm.isLoading = false;
         vm.allProducts = response.data.products;
         vm.displayProducts = vm.allProducts;
 
@@ -241,27 +242,49 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@mixin Width-Height($Wsize, $Hsize) {
+  width: $Wsize;
+  height: $Hsize;
+};
+@mixin desktop {
+  @media screen and (max-width: 767px){
+    @content
+  }
+};
+
 .products{
   width: 1124px;
   margin: 0 auto;
+  @include desktop() {
+    width: 100%;
+    padding: 0 10px;
+  }
 
   .products-header{
     height: 75px;
+    @include desktop() {
+      height: 160px;
+    }
 
     .products-title{
       float: left;
       height: 75px;
+      @include desktop() {
+        height: 50px;
+      }
       
       .list-icon{
         float: left;
 
         i{
-          width: 30px;
-          height: 30px;
+          @include Width-Height(30px, 30px);
           font-size: 20px;
           text-align: center;
           padding-top: 8px;
           color: #616161;
+          @include desktop() {
+            font-size: 18px;
+          }
         }
 
         h3{
@@ -269,6 +292,9 @@ export default {
           font-size: 30px;
           color: #616161;
           padding-top: 5px;
+          @include desktop() {
+            font-size: 24px;
+          }
         }
       }
 
@@ -279,6 +305,13 @@ export default {
         margin-left: 30px;
         font-size: 16px;
         width: 85px;
+        @include desktop() {
+          margin-left: 20px;
+          font-size: 14px;
+          display: flex;
+          align-items: center;
+          height: 28px;
+        }
 
         .allProducts-length{
           color: crimson;
@@ -289,18 +322,24 @@ export default {
 
     .products-filter{
       float: right;
-      width: 854px;
-      height: 75px;
+      @include Width-Height(854px, 75px);
+      @include desktop() {
+        float: left;
+        @include Width-Height(100%, 0);
+      }
 
       .search-form{
         width: 181px;
         border: 1px solid #616161;
         margin-left: 523px;
         float: left;
+        @include desktop() {
+          margin-left: 0;
+          width: 100%;
+        }
 
         .searchLabel{
-          width: 30px;
-          height: 30px;
+          @include Width-Height(30px, 30px);
           margin-left: 2px;
           margin-top: 8px;
           position: absolute;
@@ -321,12 +360,28 @@ export default {
           color: #c6c6c6;
         }
       }
-
+      
       .products-price{
         float: right;
-        width: 130px;
-        height: 45px;
+        @include Width-Height(130px, 45px);
         padding-left: 10px;
+        @include desktop() {
+          float: left;
+          margin-left: 33px;
+          margin-top: 10px;
+        }
+      }
+
+      .category-select{
+        display: none;
+        float: left;
+        @include desktop() {
+          display: block;
+          @include Width-Height(130px, 45px);
+          padding-left: 10px;
+          margin-top: 10px;
+          margin-left: 27px;
+        }
       }
 
       .search-popover{
@@ -357,13 +412,18 @@ export default {
   }
 
   .septalLine{
-    width: 100%;
-    height: 1px;
+    @include Width-Height(100%, 1px);
     background: #c4c4c4;
+    @include desktop() {
+      display: none;
+    }
   }
 
   .product-category{
     height: 70px;
+    @include desktop() {
+      display: none;
+    }
 
     .product-category-btn{
       margin-top: 22px;
@@ -385,6 +445,10 @@ export default {
   .card-wrapper{
     margin-left: 28px;
     display: inline-block;
+    @include desktop() {
+      margin-left: 0;
+      display: block;
+    }
 
     &:nth-child(4n+1){
       margin-left: 0;
@@ -404,8 +468,7 @@ export default {
     justify-content: center;
 
     .pagination-inner{
-      width: 50%;
-      height: 93px;
+      @include Width-Height(50%, 93px);
       display: flex;
       justify-content: center;
       padding-top: 30px;

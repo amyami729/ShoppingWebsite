@@ -1,5 +1,4 @@
 export default ({
-  // 開啟命名空間
   namespaced: true,
   state: {
     messages: []

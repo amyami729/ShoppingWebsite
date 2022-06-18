@@ -6,7 +6,7 @@
           <h5 class="modal-title" id="couponModalLabel">
             <slot name="title"></slot>
           </h5>
-          <button type="button" class="btn-close" @click="hideModel()" aria-label="Close"></button>
+          <button type="button" class="btn-close" @click="hideModel" aria-label="Close"></button>
         </div>
 
         <div class="modal-body">
@@ -39,7 +39,7 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" @click="hideModel()">取消</button>
+          <button type="button" class="btn btn-outline-secondary" @click="hideModel">取消</button>
           <button type="button" class="btn btn-success" @click="updateCoupon">確定</button>
         </div>
       </div>
@@ -54,7 +54,7 @@ export default {
   }, 
   data() {
     return {
-      currentCoupon: {},  // 1.將當前產品之內容綁定在此
+      currentCoupon: {}  // 1.將當前產品之內容綁定在此
     }
   },
   methods: {
@@ -64,11 +64,10 @@ export default {
     getCoupons() {
       this.$emit('emit-getCoupons');
     },
-    // 2.透過post方式將currentCoupon新增到資料庫裡
+    // 2.將 currentCoupon 寫入資料庫
     updateCoupon() {
       let api;
       let httpMethod;
-
       if (this.isNew) { 
         api  = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/admin/coupon`;  // 新增優惠券
         httpMethod = 'post';
@@ -78,9 +77,9 @@ export default {
       }
 
       this.$http[httpMethod](api, {data: this.currentCoupon}).then((response) => {
-        if (response.data.success) {  // 若商品 建立/編輯 成功,
-          this.hideModel();    // 關閉modal
-          this.getCoupons();   // 重新取得產品資料
+        if (response.data.success) {
+          this.hideModel();
+          this.getCoupons();
         }
       });
     }

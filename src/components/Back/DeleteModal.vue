@@ -7,7 +7,7 @@
           <h5 class="modal-title" id="deleteModalLabel">
             <slot name="title"></slot>
           </h5>
-          <button type="button" class="btn-close" @click="hideModel()" data-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" @click="hideModel" data-dismiss="modal" aria-label="Close"></button>
         </div>
 
         <div class="modal-body">
@@ -15,7 +15,7 @@
         </div>
         
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" @click="hideModel()">取消</button>
+          <button type="button" class="btn btn-outline-secondary" @click="hideModel">取消</button>
           <button type="button" class="btn btn-danger" @click="deleteItem(currentItem.id)">確認</button>
         </div>
       </div>
@@ -26,7 +26,7 @@
 <script>
 export default {
   props: {
-    currentItem: Object,
+    currentItem: Object
   },
   methods: {
     hideModel() {

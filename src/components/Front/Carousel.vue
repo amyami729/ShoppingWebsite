@@ -26,17 +26,15 @@ import { ref, onMounted } from 'vue';
 
 export default {
   setup() {
-    //ref 方法用來建立一個響應式的資料物件，該物件包含一個 value 屬性，值為響應式資料本身
-    const currentSlide = ref(1);   //用來顯示當前圖片是第幾張
-    const getSlideCount = ref(null);    //用來控制圖片
+    const currentSlide = ref(1);   // 用來顯示當前圖片是第幾張
+    const getSlideCount = ref(null);    // 用來控制圖片
     const autoPlayEnabled = ref(true);
     const timeoutDuration = ref(5000);
 
     // prev slide
     const prevSlide = () => {
       if (currentSlide.value === 1) {
-        currentSlide.value = getSlideCount.value;
-        return;
+        return currentSlide.value = getSlideCount.value;
       }
       currentSlide.value -= 1;
     };
@@ -44,8 +42,7 @@ export default {
     // next slide
     const nextSlide = () => {
       if (currentSlide.value === getSlideCount.value) {
-        currentSlide.value = 1;
-        return;
+        return currentSlide.value = 1;
       }
       currentSlide.value += 1;
     };
@@ -66,7 +63,7 @@ export default {
       autoPlay();
     }
 
-    //定義鉤子函數: 掛載目標元素，獲取slide總長度
+    // 掛載目標元素，獲取slide總長度
     onMounted(() => {
       getSlideCount.value = document.querySelectorAll('#slide').length;
     });

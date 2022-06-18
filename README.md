@@ -1,4 +1,7 @@
 # ShoppingWebsite
+## Demo
+https://amyami729.github.io/#/home
+
 ## Introduction
 - 使用 Vue 實作購物網站功能，串接後端 API 所提供資訊
 - 使用 Vuex 管理購物車清單的商品
@@ -45,7 +48,7 @@
 
 ## Display
 ### 首頁
-![](https://i.imgur.com/UksPyGA.jpg)
+![](https://i.imgur.com/FMrLTGp.jpg)
 
 ### 產品列表
 ![](https://i.imgur.com/SO1LoX5.jpg)

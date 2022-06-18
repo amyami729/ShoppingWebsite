@@ -7,7 +7,6 @@ import VueAxios from 'vue-axios';
 import 'bootstrap';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
-// AOS 動畫
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 
@@ -31,13 +30,13 @@ app.mount('#app');
 
 // 驗證登入
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth) {  //如果跳轉的路由對象需要驗證
+  if (to.meta.requiresAuth) {   // 判斷需要驗證的頁面
     const api = `${process.env.VUE_APP_APIPATH}/api/user/check`;
     axios.post(api).then((response) => {
-      if (response.data.success) {   //如果有登入成功時
+      if (response.data.success) {
         next();
       } else {
-        next({ path: '/login' });   //否則，跳轉到登入的頁面
+        next({ path: '/login' });
       }
     });
   } else {
